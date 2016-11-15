@@ -31,7 +31,13 @@ public class AudioPlayer implements MediaPlayer.OnBufferingUpdateListener, Media
     private TimerTask mTimerTask;
     private AudioManager mAudioManager;
 
-    // 初始化播放器
+
+    /**
+     * 音频播放器
+     *
+     * @param context 上下文
+     * @param handler 音频状态handler
+     */
     public AudioPlayer(Context context, Handler handler) {
         super();
         this.mRemoteHandler = handler;

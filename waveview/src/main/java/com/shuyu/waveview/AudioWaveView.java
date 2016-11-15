@@ -11,13 +11,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 
 import java.util.ArrayList;
-import java.util.Map;
+
 
 /**
  * 声音波形的view

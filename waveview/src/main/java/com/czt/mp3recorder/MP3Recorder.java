@@ -267,11 +267,22 @@ public class MP3Recorder {
         }
     }
 
+    /**
+     * 设置数据的获取显示，设置最大的获取数，一般都是控件大小/线的间隔offset
+     *
+     * @param dataList 数据
+     * @param maxSize  最大个数
+     */
     public void setDataList(ArrayList<Short> dataList, int maxSize) {
         this.dataList = dataList;
         this.maxSize = maxSize;
     }
 
+    /**
+     * 设置错误回调
+     *
+     * @param errorHandler 错误通知
+     */
     public void setErrorHandler(Handler errorHandler) {
         this.errorHandler = errorHandler;
     }
