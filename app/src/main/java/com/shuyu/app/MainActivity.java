@@ -11,20 +11,27 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.czt.mp3recorder.MP3Recorder;
+import com.shuyu.waveview.AudioPlayer;
 import com.shuyu.waveview.AudioWaveView;
 import com.shuyu.waveview.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+/**
+ * Created by shuyu on 2016/11/15.
+ * 声音波形，录制与播放
+ */
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.audioWave)
@@ -39,13 +46,21 @@ public class MainActivity extends AppCompatActivity {
     Button reset;
     @BindView(R.id.activity_main)
     RelativeLayout activityMain;
+    @BindView(R.id.playText)
+    TextView playText;
 
 
     MP3Recorder mRecorder;
+    AudioPlayer audioPlayer;
 
     String filePath;
 
     boolean mIsRecord = false;
+
+    boolean mIsPlay = false;
+
+    int duration;
+    int curPosition;
 
 
     @Override
@@ -55,6 +70,31 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         resolveNormalUI();
+
+        audioPlayer = new AudioPlayer(this, new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case AudioPlayer.HANDLER_CUR_TIME://更新的时间
+                        curPosition = (int) msg.obj;
+                        playText.setText(toTime(curPosition) + " / " + toTime(duration));
+                        break;
+                    case AudioPlayer.HANDLER_COMPLETE://播放结束
+                        playText.setText(" ");
+                        mIsPlay = false;
+                        break;
+                    case AudioPlayer.HANDLER_PREPARED://播放开始
+                        duration = (int) msg.obj;
+                        playText.setText(toTime(curPosition) + " / " + toTime(duration));
+                        break;
+                    case AudioPlayer.HANDLER_ERROR://播放错误
+                        resolveResetPlay();
+                        break;
+                }
+
+            }
+        });
     }
 
     @Override
@@ -62,6 +102,10 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         if (mIsRecord) {
             resolveStopRecord();
+        }
+        if (mIsPlay) {
+            audioPlayer.pause();
+            audioPlayer.stop();
         }
     }
 
@@ -75,41 +119,17 @@ public class MainActivity extends AppCompatActivity {
                 resolveStopRecord();
                 break;
             case R.id.play:
+                resolvePlayRecord();
                 break;
             case R.id.reset:
+                resolveResetPlay();
                 break;
         }
     }
 
-
-    private void resolveNormalUI() {
-        record.setEnabled(true);
-        stop.setEnabled(false);
-        play.setEnabled(false);
-        reset.setEnabled(false);
-    }
-
-    private void resolveRecordUI() {
-        record.setEnabled(false);
-        stop.setEnabled(true);
-        play.setEnabled(false);
-        reset.setEnabled(false);
-    }
-
-    private void resolveStopUI() {
-        record.setEnabled(true);
-        stop.setEnabled(false);
-        play.setEnabled(true);
-        reset.setEnabled(true);
-    }
-
-    private void resolvePlayUI() {
-        record.setEnabled(false);
-        stop.setEnabled(false);
-        play.setEnabled(true);
-        reset.setEnabled(true);
-    }
-
+    /**
+     * 开始录音
+     */
     private void resolveRecord() {
         filePath = FileUtils.getAppPath();
         File file = new File(filePath);
@@ -147,6 +167,9 @@ public class MainActivity extends AppCompatActivity {
         mIsRecord = true;
     }
 
+    /**
+     * 停止录音
+     */
     private void resolveStopRecord() {
         resolveStopUI();
         if (mRecorder != null && mRecorder.isRecording()) {
@@ -157,6 +180,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 录音异常
+     */
     private void resolveError() {
         resolveNormalUI();
         FileUtils.deleteFile(filePath);
@@ -167,17 +193,66 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 播放
+     */
     private void resolvePlayRecord() {
         if (TextUtils.isEmpty(filePath) || !new File(filePath).exists()) {
             Toast.makeText(this, "文件不存在", Toast.LENGTH_SHORT).show();
             return;
         }
+        playText.setText(" ");
+        mIsPlay = true;
+        audioPlayer.playUrl(filePath);
+        resolvePlayUI();
     }
 
+    /**
+     * 重置
+     */
     private void resolveResetPlay() {
         filePath = "";
+        playText.setText("");
+        if (mIsPlay) {
+            mIsPlay = false;
+            audioPlayer.pause();
+        }
+        resolveNormalUI();
     }
 
+    private String toTime(long time) {
+        SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
+        String dateString = formatter.format(time);
+        return dateString;
+    }
+
+    private void resolveNormalUI() {
+        record.setEnabled(true);
+        stop.setEnabled(false);
+        play.setEnabled(false);
+        reset.setEnabled(false);
+    }
+
+    private void resolveRecordUI() {
+        record.setEnabled(false);
+        stop.setEnabled(true);
+        play.setEnabled(false);
+        reset.setEnabled(false);
+    }
+
+    private void resolveStopUI() {
+        record.setEnabled(true);
+        stop.setEnabled(false);
+        play.setEnabled(true);
+        reset.setEnabled(true);
+    }
+
+    private void resolvePlayUI() {
+        record.setEnabled(false);
+        stop.setEnabled(false);
+        play.setEnabled(true);
+        reset.setEnabled(true);
+    }
 
     /**
      * 获取屏幕的宽度px

@@ -14,6 +14,7 @@
         waveview:waveColor="#FAFFFFFF" />
 
     <LinearLayout
+        android:id="@+id/btn_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/audioWave"
@@ -54,5 +55,15 @@
             android:text="重置" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/playText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_layout"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
 
 </RelativeLayout>
