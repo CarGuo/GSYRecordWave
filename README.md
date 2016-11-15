@@ -13,6 +13,7 @@
 <p></p>
 <img src="https://github.com/CarGuo/RecordWave/blob/master/03.jpg" width="240px" height="426px"/>
 <p></p>
+###动态图效果
 <img src="https://github.com/CarGuo/RecordWave/blob/master/01.gif" width="240px" height="426px"/>
 <p></p>
 
