@@ -11,7 +11,7 @@
 ## 效果显示
 <img src="https://github.com/CarGuo/RecordWave/blob/master/01.jpg" width="240px" height="426px"/>
 <p></p>
-<img src="https://github.com/CarGuo/RecordWave/blob/master/02.jpg" width="240px" height="426px"/>
+<img src="https://github.com/CarGuo/RecordWave/blob/master/03.jpg" width="240px" height="426px"/>
 <p></p>
 <img src="https://github.com/CarGuo/RecordWave/blob/master/01.gif" width="240px" height="426px"/>
 <p></p>
