@@ -47,6 +47,22 @@ mRecorder.setDataList(audioWave.getRecList(), size);
 //错误回调
 mRecorder.setErrorHandler(new Handler() {
 
+···
+
+/**
+  * 获取真实的音量。
+  *
+  * @return 真实音量
+  */
+ public int getRealVolume()
+
+ /**
+  * 获取相对音量。 超过最大值时取最大值。
+  *
+  * @return 音量
+  */
+ public int getVolume()
+
 ```
 
 ## AudioPlayer 音频播放
