@@ -1,6 +1,17 @@
 <h4>MP3音频录制，支持类似IOS原生的单边或者双边波形显示，低版本音频权限兼容，本地或者在线音频播放</h4>
 ======================
-<h4>JCenter 提交中,估计16号才有</h4>
+```
+<dependency>
+  <groupId>com.shuyu</groupId>
+  <artifactId>aduioRecord</artifactId>
+  <version>1.0.0</version>
+  <type>pom</type>
+</dependency>
+```
+
+<h4> compile 'com.shuyu:aduioRecord:1.0.0'</h4>
+
+<h4>可以单纯使用录制功能，也可以单纯使用图形。</h4>
 
 <h4><a href="http://www.jianshu.com/p/2448e2903b07">简书入口 这里有详细介绍</a></h4>
 
