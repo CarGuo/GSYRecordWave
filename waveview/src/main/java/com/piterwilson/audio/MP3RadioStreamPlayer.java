@@ -110,7 +110,6 @@ public class MP3RadioStreamPlayer {
     /**
      * Attempts to fetch mp3 data from the mUrlString location, decode it and feed it to an AudioTrack instance
      *
-     * @return void
      * @throws IOException
      */
     public void play() throws IOException {
@@ -388,8 +387,6 @@ public class MP3RadioStreamPlayer {
 
     /**
      * Stops playback
-     *
-     * @return void
      */
     public void stop() {
         doStop = true;

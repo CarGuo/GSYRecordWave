@@ -4,12 +4,35 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>aduioRecord</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <type>pom</type>
 </dependency>
 ```
 
-<h4> compile 'com.shuyu:aduioRecord:1.0.0'</h4>
+<h4> compile 'com.shuyu:aduioRecord:1.0.1'</h4>
+
+### 1.0.1
+* 增加了录制的播放MP3时也可以显示波形 主要是通过<a href="https://github.com/piterwilson/MP3StreamPlayer">MP3RadioStreamPlayer</a>修改之后实现。
+* 原理是使用AudioTrack播放流，通过系统的MediaCodec解码MP3,目前只支持本库录制下来的MP3:
+   AudioFormat.CHANNEL_OUT_MONO 单声道
+   AudioFormat.ENCODING_PCM_16BIT 16位
+
+```
+if (player != null) {
+    player.stop();
+    player.release();
+    player = null;
+}
+player = new MP3RadioStreamPlayer();
+player.setUrlString(uri);//可以是本地uri或者网络URL
+player.setDelegate(this);
+
+int size = getScreenWidth(this) / dip2px(this, 1);//控件默认的间隔是1
+player.setDataList(audioWave.getRecList(), size);
+audioWave.startView();
+//可以设置循环播放
+
+```
 
 <h4><a href="http://www.jianshu.com/p/2448e2903b07">简书入口 这里有详细介绍</a></h4>
 
