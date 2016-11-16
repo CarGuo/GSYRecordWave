@@ -4,19 +4,18 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>aduioRecord</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <type>pom</type>
 </dependency>
 ```
 
-<h4> compile 'com.shuyu:aduioRecord:1.0.1'</h4>
+<h4> compile 'com.shuyu:aduioRecord:1.0.2'</h4>
 
 <h4><a href="http://www.jianshu.com/p/2448e2903b07">简书入口 这里有详细介绍</a></h4>
 
 
 ## 效果显示
 <img src="https://github.com/CarGuo/RecordWave/blob/master/01.jpg" width="240px" height="426px"/>
-<p></p>
 <img src="https://github.com/CarGuo/RecordWave/blob/master/03.jpg" width="240px" height="426px"/>
 <p></p>
 ###动态图效果
@@ -24,7 +23,7 @@
 <p></p>
 
 ### 1.0.2
-* 增加了录制波形和播放波形会根据声音频率变色的功能
+* **增加了录制波形和播放波形会根据声音频率变色的功能**
 
 ###效果 - GIF上颜色和帧数有些失真混在一起了
 
