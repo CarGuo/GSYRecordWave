@@ -11,6 +11,8 @@
 
 <h4> compile 'com.shuyu:aduioRecord:1.0.1'</h4>
 
+<h4><a href="http://www.jianshu.com/p/2448e2903b07">简书入口 这里有详细介绍</a></h4>
+
 ### 1.0.1
 * 增加了录制的播放MP3时也可以显示波形 主要是通过<a href="https://github.com/piterwilson/MP3StreamPlayer">MP3RadioStreamPlayer</a>修改之后实现。
 * 原理是使用AudioTrack播放流，通过系统的MediaCodec解码MP3,目前只支持本库录制下来的MP3:
@@ -33,8 +35,6 @@ audioWave.startView();
 //可以设置循环播放
 
 ```
-
-<h4><a href="http://www.jianshu.com/p/2448e2903b07">简书入口 这里有详细介绍</a></h4>
 
 * <h4>录制音频为MP3保存本地</h4>
 * <h4>音频权限提示</h4>
