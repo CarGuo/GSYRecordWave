@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:waveview="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_wave_play"
+    android:layout_width="match_parent"
+    android:background="@color/primary_material_dark"
+    android:layout_height="match_parent">
+
+    <com.shuyu.waveview.AudioWaveView
+        android:id="@+id/audioWave"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        waveview:waveColor="#FAFFFFFF" />
+</RelativeLayout>

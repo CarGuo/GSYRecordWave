@@ -1,6 +1,7 @@
 package com.shuyu.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     Button play;
     @BindView(R.id.reset)
     Button reset;
+    @BindView(R.id.wavePlay)
+    Button wavePlay;
     @BindView(R.id.activity_main)
     RelativeLayout activityMain;
     @BindView(R.id.playText)
@@ -109,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.record, R.id.stop, R.id.play, R.id.reset})
+    @OnClick({R.id.record, R.id.stop, R.id.play, R.id.reset, R.id.wavePlay})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.record:
@@ -123,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.reset:
                 resolveResetPlay();
+            case R.id.wavePlay:
+                resolvePlayWaveRecord();
                 break;
         }
     }
@@ -208,6 +213,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * 播放
+     */
+    private void resolvePlayWaveRecord() {
+        if (TextUtils.isEmpty(filePath) || !new File(filePath).exists()) {
+            Toast.makeText(this, "文件不存在", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        resolvePlayUI();
+        Intent intent = new Intent(this, WavePlayActivity.class);
+        intent.putExtra("uri", filePath);
+        startActivity(intent);
+    }
+
+
+    /**
      * 重置
      */
     private void resolveResetPlay() {
@@ -230,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
         record.setEnabled(true);
         stop.setEnabled(false);
         play.setEnabled(false);
+        wavePlay.setEnabled(false);
         reset.setEnabled(false);
     }
 
@@ -237,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
         record.setEnabled(false);
         stop.setEnabled(true);
         play.setEnabled(false);
+        wavePlay.setEnabled(false);
         reset.setEnabled(false);
     }
 
@@ -244,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
         record.setEnabled(true);
         stop.setEnabled(false);
         play.setEnabled(true);
+        wavePlay.setEnabled(true);
         reset.setEnabled(true);
     }
 
@@ -251,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
         record.setEnabled(false);
         stop.setEnabled(false);
         play.setEnabled(true);
+        wavePlay.setEnabled(true);
         reset.setEnabled(true);
     }
 
@@ -260,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
      * @param context 上下文
      * @return 屏幕宽px
      */
-    private int getScreenWidth(Context context) {
+    public static int getScreenWidth(Context context) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();// 创建了一张白纸
         windowManager.getDefaultDisplay().getMetrics(outMetrics);// 给白纸设置宽高
@@ -273,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
      * @param context 上下文
      * @return 屏幕高px
      */
-    private int getScreenHeight(Context context) {
+    public static int getScreenHeight(Context context) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();// 创建了一张白纸
         windowManager.getDefaultDisplay().getMetrics(outMetrics);// 给白纸设置宽高
@@ -283,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * dip转为PX
      */
-    private int dip2px(Context context, float dipValue) {
+    public static int dip2px(Context context, float dipValue) {
         float fontScale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * fontScale + 0.5f);
     }
