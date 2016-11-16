@@ -2,15 +2,18 @@ package com.shuyu.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,10 +26,11 @@ import com.shuyu.waveview.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Random;
 import java.util.UUID;
 
-import butterknife.ButterKnife;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -51,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout activityMain;
     @BindView(R.id.playText)
     TextView playText;
+    @BindView(R.id.colorImg)
+    ImageView colorImg;
 
 
     MP3Recorder mRecorder;
@@ -64,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
     int duration;
     int curPosition;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //audioWave.setBaseRecorder(mRecorder);
 
         try {
             mRecorder.start();
@@ -277,6 +284,10 @@ public class MainActivity extends AppCompatActivity {
         wavePlay.setEnabled(true);
         reset.setEnabled(true);
     }
+
+
+
+
 
     /**
      * 获取屏幕的宽度px

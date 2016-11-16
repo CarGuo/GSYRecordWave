@@ -14,6 +14,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
+import com.BaseRecorder;
+
 import java.util.ArrayList;
 
 
@@ -27,6 +29,8 @@ public class AudioWaveView extends View {
 
     public static final String MAX = "max_volume"; //map中的key
     public static final String MIN = "min_volume";//map中的key
+
+    final protected Object mLock = new Object();
 
     private Context mContext;
 
@@ -42,9 +46,9 @@ public class AudioWaveView extends View {
 
     private ArrayList<Short> mRecDataList = new ArrayList<>();
 
-    final protected Object mLock = new Object();
-
     private drawThread mInnerThread;
+
+    private BaseRecorder mBaseRecorder;
 
     private int mWidthSpecSize;
     private int mHeightSpecSize;
@@ -53,10 +57,22 @@ public class AudioWaveView extends View {
     private int mOffset = -11;//波形之间线与线的间隔
 
     private boolean mIsDraw = true;
+
     private int mWaveCount = 2;
 
     private int mWaveColor = Color.WHITE;
 
+    private int mColorPoint = 1;
+
+    private int mPreFFtCurrentFrequency;
+
+    private int mColorChangeFlag;
+
+    private int mColor1 = Color.argb(0xfa, 0x6f, 0xff, 0x81);
+
+    private int mColor2 = Color.argb(0xfa, 0xff, 0xff, 0xff);
+
+    private int mColor3 = Color.argb(0xfa, 0x42, 0xff, 0xff);
 
     Handler handler = new Handler() {
         @Override
@@ -169,6 +185,9 @@ public class AudioWaveView extends View {
                     continue;
                 }
                 resolveToWaveData(dataList);
+                if (dataList.size() > 0) {
+                    updateColor();
+                }
                 if (mBackCanVans != null) {
                     mBackCanVans.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                     mBackCanVans.drawLine(0, mBaseLine, mWidthSpecSize, mBaseLine, mPaint);
@@ -191,13 +210,14 @@ public class AudioWaveView extends View {
                         mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                         mCanvas.drawBitmap(mBackgroundBitmap, 0, 0, mPaint);
                     }
+
                     Message msg = new Message();
                     msg.what = 0;
                     handler.sendMessage(msg);
                 }
                 //休眠暂停资源
                 try {
-                    Thread.sleep(45);
+                    Thread.sleep(40);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -262,6 +282,68 @@ public class AudioWaveView extends View {
         }
         mBackCanVans.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+    }
+
+    private void updateColor() {
+
+        if (mBaseRecorder == null)
+            return;
+
+        int volume = mBaseRecorder.getRealVolume();
+        //Log.e("volume ", "volume " + volume);
+        int scale = (volume / 100);
+
+        if (scale < 5) {
+            mPreFFtCurrentFrequency = scale;
+            return;
+        }
+        int fftScale = 0;
+        if (mPreFFtCurrentFrequency != 0) {
+            fftScale = scale / mPreFFtCurrentFrequency;
+        }
+
+        if (mColorChangeFlag == 4 || fftScale > 10) {
+            mColorChangeFlag = 0;
+        }
+
+        if (mColorChangeFlag == 0) {
+            if (mColorPoint == 1) {
+                mColorPoint = 2;
+            } else if (mColorPoint == 2) {
+                mColorPoint = 3;
+            } else if (mColorPoint == 3) {
+                mColorPoint = 1;
+            }
+            int color;
+            if (mColorPoint == 1) {
+                color = mColor1;
+            } else if (mColorPoint == 2) {
+                color = mColor3;
+            } else {
+                color = mColor2;
+            }
+            mPaint.setColor(color);
+        }
+        mColorChangeFlag++;
+        if (scale != 0)
+            mPreFFtCurrentFrequency = scale;
+    }
+
+    /**
+     * 三种颜色,不设置用默认的
+     */
+    public void setChangeColor(int color1, int color2, int color3) {
+        this.mColor1 = color1;
+        this.mColor2 = color2;
+        this.mColor3 = color3;
+    }
+
+
+    /**
+     * 设置好偶波形会变色
+     */
+    public void setBaseRecorder(BaseRecorder baseRecorder) {
+        mBaseRecorder = baseRecorder;
     }
 
 

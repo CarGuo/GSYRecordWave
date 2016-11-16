@@ -13,6 +13,36 @@
 
 <h4><a href="http://www.jianshu.com/p/2448e2903b07">简书入口 这里有详细介绍</a></h4>
 
+
+## 效果显示
+<img src="https://github.com/CarGuo/RecordWave/blob/master/01.jpg" width="240px" height="426px"/>
+<p></p>
+<img src="https://github.com/CarGuo/RecordWave/blob/master/03.jpg" width="240px" height="426px"/>
+<p></p>
+###动态图效果
+<img src="https://github.com/CarGuo/RecordWave/blob/master/01.gif" width="240px" height="426px"/>
+<p></p>
+
+### 1.0.2
+* 增加了录制波形和播放波形会根据声音频率变色的功能
+
+###效果 - GIF上颜色和帧数有些失真混在一起了
+
+<img src="https://github.com/CarGuo/RecordWave/blob/master/02.gif" width="240px" height="426px"/>
+
+```
+//将播放器或者录制器设置进去即可生效
+audioWave.setBaseRecorder(player);
+
+····
+
+/**
+ * 三种颜色,不设置用默认的
+ */
+public void setChangeColor(int color1, int color2, int color3) {
+
+```
+
 ### 1.0.1
 * 增加了录制的播放MP3时也可以显示波形 主要是通过<a href="https://github.com/piterwilson/MP3StreamPlayer">MP3RadioStreamPlayer</a>修改之后实现。
 * 原理是使用AudioTrack播放流，通过系统的MediaCodec解码MP3,目前只支持本库录制下来的MP3:
@@ -42,14 +72,6 @@ audioWave.startView();
 * <h4>支持获取声音大小</h4>
 * <h4>本地/网络音频播放，音频时长与播放时长支持</h4>
 
-## 效果显示
-<img src="https://github.com/CarGuo/RecordWave/blob/master/01.jpg" width="240px" height="426px"/>
-<p></p>
-<img src="https://github.com/CarGuo/RecordWave/blob/master/03.jpg" width="240px" height="426px"/>
-<p></p>
-###动态图效果
-<img src="https://github.com/CarGuo/RecordWave/blob/master/01.gif" width="240px" height="426px"/>
-<p></p>
 
 ## AudioWaveView 声音波形显示，可单可双，自动调整波形高度适应高度
 

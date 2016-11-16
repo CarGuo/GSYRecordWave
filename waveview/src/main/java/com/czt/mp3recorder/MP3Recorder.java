@@ -6,6 +6,7 @@ import android.media.MediaRecorder;
 import android.os.Handler;
 import android.os.Message;
 
+import com.BaseRecorder;
 import com.czt.mp3recorder.util.LameUtil;
 import com.shuyu.waveview.AudioWaveView;
 
@@ -18,7 +19,7 @@ import java.util.Map;
 
 import static android.media.AudioRecord.STATE_INITIALIZED;
 
-public class MP3Recorder {
+public class MP3Recorder extends BaseRecorder {
     //=======================AudioRecord Default Settings=======================
     private static final int DEFAULT_AUDIO_SOURCE = MediaRecorder.AudioSource.MIC;
     /**
@@ -144,33 +145,15 @@ public class MP3Recorder {
                 }
             }
 
-            /**
-             * 此计算方法来自samsung开发范例
-             *
-             * @param buffer buffer
-             * @param readSize readSize
-             */
-            private void calculateRealVolume(short[] buffer, int readSize) {
-                double sum = 0;
-                for (int i = 0; i < readSize; i++) {
-                    // 这里没有做运算的优化，为了更加清晰的展示代码
-                    sum += buffer[i] * buffer[i];
-                }
-                if (readSize > 0) {
-                    double amplitude = sum / readSize;
-                    mVolume = (int) Math.sqrt(amplitude);
-                }
-            }
         }.start();
     }
-
-    private int mVolume;
 
     /**
      * 获取真实的音量。 [算法来自三星]
      *
      * @return 真实音量
      */
+    @Override
     public int getRealVolume() {
         return mVolume;
     }

@@ -84,5 +84,12 @@
             android:text="波形播放" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/colorImg"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/btn_layout_2"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="5dp" />
 
 </RelativeLayout>

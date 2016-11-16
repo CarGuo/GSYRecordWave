@@ -17,13 +17,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.BaseRecorder;
+
 /**
  * Plays a MP3 Radio stream using MediaExtractor, MediaCodec and AudioTrack
  *
  * @author Juan Carlos Ospina Gonzalez / juan@supersteil.com
  */
 
-public class MP3RadioStreamPlayer {
+public class MP3RadioStreamPlayer extends BaseRecorder {
 
     public final String LOG_TAG = "MP3RadioStreamPlayer";
 
@@ -312,6 +314,7 @@ public class MP3RadioStreamPlayer {
                     short[] music = (!isBigEnd()) ? byteArray2ShortArrayLittle(chunk, chunk.length / 2) :
                             byteArray2ShortArrayBig(chunk, chunk.length / 2);
                     sendData(music, music.length);
+                    calculateRealVolume(music, music.length);
 
                     if (this.mState != State.Playing) {
                         mDelegateHandler.onRadioPlayerPlaybackStarted(MP3RadioStreamPlayer.this);
@@ -463,6 +466,18 @@ public class MP3RadioStreamPlayer {
                 dataList.add(resultMax);
             }
         }
+    }
+
+
+
+    /**
+     * 获取真实的音量。 [算法来自三星]
+     *
+     * @return 真实音量
+     */
+    @Override
+    public int getRealVolume() {
+        return mVolume;
     }
 
     /**
