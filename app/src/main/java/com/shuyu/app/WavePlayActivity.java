@@ -3,6 +3,7 @@ package com.shuyu.app;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.RelativeLayout;
 
 import com.piterwilson.audio.MP3RadioStreamDelegate;
@@ -18,6 +19,8 @@ import static com.shuyu.app.MainActivity.dip2px;
 import static com.shuyu.app.MainActivity.getScreenWidth;
 
 public class WavePlayActivity extends AppCompatActivity implements MP3RadioStreamDelegate {
+
+    private final static String TAG = "WavePlayActivity";
 
     @BindView(R.id.audioWave)
     AudioWaveView audioWave;
@@ -80,6 +83,7 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
 
     @Override
     public void onRadioPlayerPlaybackStarted(MP3RadioStreamPlayer player) {
+        Log.i(TAG, "onRadioPlayerPlaybackStarted");
         this.runOnUiThread(new Runnable() {
 
             @Override
@@ -90,6 +94,7 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
 
     @Override
     public void onRadioPlayerStopped(MP3RadioStreamPlayer player) {
+        Log.i(TAG, "onRadioPlayerStopped");
         this.runOnUiThread(new Runnable() {
 
             @Override
@@ -101,6 +106,7 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
 
     @Override
     public void onRadioPlayerError(MP3RadioStreamPlayer player) {
+        Log.i(TAG, "onRadioPlayerError");
         this.runOnUiThread(new Runnable() {
 
             @Override
@@ -112,6 +118,7 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
 
     @Override
     public void onRadioPlayerBuffering(MP3RadioStreamPlayer player) {
+        Log.i(TAG, "onRadioPlayerBuffering");
         this.runOnUiThread(new Runnable() {
 
             @Override

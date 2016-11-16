@@ -46,6 +46,10 @@ public class MP3RadioStreamPlayer {
 
     private int maxSize;
 
+    private boolean isLoop = false;
+
+    private boolean hadPlay = false;
+
     /**
      * Set the delegate for this instance. The delegate will receive notifications about the player's status
      *
@@ -314,6 +318,7 @@ public class MP3RadioStreamPlayer {
                         mDelegateHandler.onRadioPlayerPlaybackStarted(MP3RadioStreamPlayer.this);
                     }
                     this.mState = State.Playing;
+                    hadPlay = true;
                 }
                 codec.releaseOutputBuffer(outputBufIndex, false /* render */);
                 if ((info.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
@@ -343,7 +348,9 @@ public class MP3RadioStreamPlayer {
         // attempt reconnect
         if (sawOutputEOS) {
             try {
-                MP3RadioStreamPlayer.this.play();
+                if (isLoop || !hadPlay) {
+                    MP3RadioStreamPlayer.this.play();
+                }
                 return;
             } catch (IOException e) {
                 // TODO Auto-generated catch block
@@ -472,5 +479,11 @@ public class MP3RadioStreamPlayer {
         this.maxSize = maxSize;
     }
 
+    public boolean isLoop() {
+        return isLoop;
+    }
 
+    public void setLoop(boolean loop) {
+        isLoop = loop;
+    }
 }
