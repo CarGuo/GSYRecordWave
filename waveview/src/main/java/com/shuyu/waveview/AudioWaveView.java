@@ -54,7 +54,10 @@ public class AudioWaveView extends View {
     private int mHeightSpecSize;
     private int mScale = 1;
     private int mBaseLine;
+
     private int mOffset = -11;//波形之间线与线的间隔
+
+    private boolean mAlphaByVolume; //是否更具声音大小显示清晰度
 
     private boolean mIsDraw = true;
 
@@ -73,6 +76,7 @@ public class AudioWaveView extends View {
     private int mColor2 = Color.argb(0xfa, 0xff, 0xff, 0xff);
 
     private int mColor3 = Color.argb(0xfa, 0x42, 0xff, 0xff);
+
 
     Handler handler = new Handler() {
         @Override
@@ -289,19 +293,26 @@ public class AudioWaveView extends View {
         if (mBaseRecorder == null)
             return;
 
+        //获取音量大小
         int volume = mBaseRecorder.getRealVolume();
         //Log.e("volume ", "volume " + volume);
+
+        //缩减过滤掉小数据
         int scale = (volume / 100);
 
+        //是否大于给定阈值
         if (scale < 5) {
             mPreFFtCurrentFrequency = scale;
             return;
         }
+
+        //这个数据和上个数据之间的比例
         int fftScale = 0;
         if (mPreFFtCurrentFrequency != 0) {
             fftScale = scale / mPreFFtCurrentFrequency;
         }
 
+        //如果连续几个或者大了好多就可以改变颜色
         if (mColorChangeFlag == 4 || fftScale > 10) {
             mColorChangeFlag = 0;
         }
@@ -316,15 +327,16 @@ public class AudioWaveView extends View {
             }
             int color;
             if (mColorPoint == 1) {
-                color = mColor1;
+                color = Color.argb((mAlphaByVolume) ? 50 * scale : 0xff, Color.red(mColor1), Color.green(mColor1), Color.blue(mColor1));
             } else if (mColorPoint == 2) {
-                color = mColor3;
+                color = Color.argb((mAlphaByVolume) ? 50 * scale : 0xff, Color.red(mColor2), Color.green(mColor2), Color.blue(mColor2));
             } else {
-                color = mColor2;
+                color = Color.argb((mAlphaByVolume) ? 50 * scale : 0xff, Color.red(mColor3), Color.green(mColor3), Color.blue(mColor3));
             }
             mPaint.setColor(color);
         }
         mColorChangeFlag++;
+        //保存数据
         if (scale != 0)
             mPreFFtCurrentFrequency = scale;
     }
@@ -338,6 +350,17 @@ public class AudioWaveView extends View {
         this.mColor3 = color3;
     }
 
+
+    public boolean isAlphaByVolume() {
+        return mAlphaByVolume;
+    }
+
+    /**
+     * 是否更具声音大小显示清晰度
+     */
+    public void setAlphaByVolume(boolean alphaByVolume) {
+        this.mAlphaByVolume = alphaByVolume;
+    }
 
     /**
      * 设置好偶波形会变色

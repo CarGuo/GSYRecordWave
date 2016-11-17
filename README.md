@@ -4,12 +4,16 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>aduioRecord</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <type>pom</type>
 </dependency>
 ```
 
-<h4> compile 'com.shuyu:aduioRecord:1.0.2'</h4>
+```
+
+compile 'com.shuyu:aduioRecord:1.0.3'
+
+```
 
 <h4><a href="http://www.jianshu.com/p/2448e2903b07">简书入口 这里有详细介绍</a></h4>
 
@@ -22,7 +26,7 @@
 <img src="https://github.com/CarGuo/RecordWave/blob/master/01.gif" width="240px" height="426px"/>
 <p></p>
 
-### 1.0.2
+### 1.0.3
 * **增加了录制波形和播放波形会根据声音频率变色的功能**
 
 ###效果 - GIF上颜色和帧数有些失真混在一起了
@@ -38,7 +42,13 @@ audioWave.setBaseRecorder(player);
 /**
  * 三种颜色,不设置用默认的
  */
-public void setChangeColor(int color1, int color2, int color3) {
+public void setChangeColor(int color1, int color2, int color3)
+
+/**
+ * 是否更具声音大小显示清晰度
+ */
+public void setAlphaByVolume(boolean alphaByVolume)
+
 
 ```
 

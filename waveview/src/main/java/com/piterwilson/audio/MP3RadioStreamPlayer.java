@@ -52,6 +52,9 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
 
     private boolean hadPlay = false;
 
+
+    private long duration;
+
     /**
      * Set the delegate for this instance. The delegate will receive notifications about the player's status
      *
@@ -197,7 +200,7 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
         ByteBuffer[] codecInputBuffers;
         ByteBuffer[] codecOutputBuffers;
 
-        // extractor gets information about the stream
+        // 这里配置一个路径文件
         extractor = new MediaExtractor();
         try {
             extractor.setDataSource(this.mUrlString);
@@ -206,22 +209,49 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
             return;
         }
 
+        //获取多媒体文件信息
         MediaFormat format = extractor.getTrackFormat(0);
+        //媒体类型
         String mime = format.getString(MediaFormat.KEY_MIME);
+
+        // 检查是否为音频文件
+        if (!mime.startsWith("audio/")) {
+            Log.e("MP3RadioStreamPlayer", "不是音频文件!");
+            return;
+        }
+
+        // 声道个数：单声道或双声道
+        int channels = format.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
+        // if duration is 0, we are probably playing a live stream
+
+        //时长
+        duration = format.getLong(MediaFormat.KEY_DURATION);
+        // System.out.println("歌曲总时间秒:"+duration/1000000);
+
+        //时长
+        int bitrate = format.getInteger(MediaFormat.KEY_BIT_RATE);
 
         // the actual decoder
         try {
+            // 实例化一个指定类型的解码器,提供数据输出
             codec = MediaCodec.createDecoderByType(mime);
         } catch (IOException e) {
             e.printStackTrace();
         }
         codec.configure(format, null /* surface */, null /* crypto */, 0 /* flags */);
         codec.start();
+        // 用来存放目标文件的数据
         codecInputBuffers = codec.getInputBuffers();
+        // 解码后的数据
         codecOutputBuffers = codec.getOutputBuffers();
 
         // get the sample rate to configure AudioTrack
         int sampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE);
+
+
+        // 设置声道类型:AudioFormat.CHANNEL_OUT_MONO单声道，AudioFormat.CHANNEL_OUT_STEREO双声道
+        int channelConfiguration = channels == 1 ? AudioFormat.CHANNEL_OUT_MONO : AudioFormat.CHANNEL_OUT_STEREO;
+        //Log.i(TAG, "channelConfiguration=" + channelConfiguration);
 
         Log.i(LOG_TAG, "mime " + mime);
         Log.i(LOG_TAG, "sampleRate " + sampleRate);
@@ -230,28 +260,29 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
         audioTrack = new AudioTrack(
                 AudioManager.STREAM_MUSIC,
                 sampleRate,
-                AudioFormat.CHANNEL_OUT_MONO,
+                channelConfiguration,
                 AudioFormat.ENCODING_PCM_16BIT,
                 AudioTrack.getMinBufferSize(
                         sampleRate,
-                        AudioFormat.CHANNEL_OUT_MONO,
+                        channelConfiguration,
                         AudioFormat.ENCODING_PCM_16BIT
                 ),
                 AudioTrack.MODE_STREAM
         );
 
-        // start playing, we will feed you later
+        //开始play，等待write发出声音
         audioTrack.play();
-        extractor.selectTrack(0);
+        extractor.selectTrack(0);//选择读取音轨
 
         // start decoding
-        final long kTimeOutUs = 10000;
+        final long kTimeOutUs = 10000;//超时
         MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
+
+        // 解码
         boolean sawInputEOS = false;
         boolean sawOutputEOS = false;
         int noOutputCounter = 0;
         int noOutputCounterLimit = 50;
-
 
         while (!sawOutputEOS && noOutputCounter < noOutputCounterLimit && !doStop) {
             //Log.i(LOG_TAG, "loop ");
@@ -294,6 +325,8 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
                 }
             }
 
+            // decode to PCM and push it to the AudioTrack player
+            // 解码数据为PCM
             int res = codec.dequeueOutputBuffer(info, kTimeOutUs);
 
             if (res >= 0) {
@@ -309,8 +342,11 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
                 buf.get(chunk);
                 buf.clear();
                 if (chunk.length > 0) {
+                    //播放
                     audioTrack.write(chunk, 0, chunk.length);
 
+                    //根据数据的大小为把byte合成short文件
+                    //然后计算音频数据的音量用于判断特征
                     short[] music = (!isBigEnd()) ? byteArray2ShortArrayLittle(chunk, chunk.length / 2) :
                             byteArray2ShortArrayBig(chunk, chunk.length / 2);
                     sendData(music, music.length);
@@ -322,6 +358,7 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
                     this.mState = State.Playing;
                     hadPlay = true;
                 }
+                //释放
                 codec.releaseOutputBuffer(outputBufIndex, false /* render */);
                 if ((info.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
                     Log.d(LOG_TAG, "saw output EOS.");
@@ -467,7 +504,6 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
             }
         }
     }
-
 
 
     /**
