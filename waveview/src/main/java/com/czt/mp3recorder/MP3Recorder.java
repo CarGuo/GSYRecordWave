@@ -4,20 +4,13 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Handler;
-import android.os.Message;
 
 import com.BaseRecorder;
 import com.czt.mp3recorder.util.LameUtil;
-import com.shuyu.waveview.AudioWaveView;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static android.media.AudioRecord.STATE_INITIALIZED;
 
 public class MP3Recorder extends BaseRecorder {
     //=======================AudioRecord Default Settings=======================
@@ -63,8 +56,9 @@ public class MP3Recorder extends BaseRecorder {
     private int mBufferSize;
     private short[] mPCMBuffer;
     private boolean mIsRecording = false;
-    private int maxSize;
-    private boolean sendError;
+    private int mMaxSize;
+    private boolean mSendError;
+    private boolean mPause;
 
     /**
      * Default constructor. Setup recorder with default sampling rate 1 channel,
@@ -106,8 +100,8 @@ public class MP3Recorder extends BaseRecorder {
 
                     if (readSize == AudioRecord.ERROR_INVALID_OPERATION ||
                             readSize == AudioRecord.ERROR_BAD_VALUE) {
-                        if (errorHandler != null && !sendError) {
-                            sendError = true;
+                        if (errorHandler != null && !mSendError) {
+                            mSendError = true;
                             errorHandler.sendEmptyMessage(ERROR_TYPE);
                             mIsRecording = false;
                             isError = true;
@@ -115,12 +109,15 @@ public class MP3Recorder extends BaseRecorder {
                     } else {
 
                         if (readSize > 0) {
+                            if (mPause) {
+                                continue;
+                            }
                             mEncodeThread.addTask(mPCMBuffer, readSize);
                             calculateRealVolume(mPCMBuffer, readSize);
                             sendData(mPCMBuffer, readSize);
                         } else {
-                            if (errorHandler != null && !sendError) {
-                                sendError = true;
+                            if (errorHandler != null && !mSendError) {
+                                mSendError = true;
                                 errorHandler.sendEmptyMessage(ERROR_TYPE);
                                 mIsRecording = false;
                                 isError = true;
@@ -242,7 +239,7 @@ public class MP3Recorder extends BaseRecorder {
                         resultMin = min;
                     }
                 }
-                if (dataList.size() > maxSize) {
+                if (dataList.size() > mMaxSize) {
                     dataList.remove(0);
                 }
                 dataList.add(resultMax);
@@ -258,7 +255,19 @@ public class MP3Recorder extends BaseRecorder {
      */
     public void setDataList(ArrayList<Short> dataList, int maxSize) {
         this.dataList = dataList;
-        this.maxSize = maxSize;
+        this.mMaxSize = maxSize;
+    }
+
+
+    public boolean isPause() {
+        return mPause;
+    }
+
+    /**
+     * 是否暂停
+     */
+    public void setPause(boolean pause) {
+        this.mPause = pause;
     }
 
     /**

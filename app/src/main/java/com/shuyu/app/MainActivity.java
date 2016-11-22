@@ -2,18 +2,17 @@ package com.shuyu.app;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +25,6 @@ import com.shuyu.waveview.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Random;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -57,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     TextView playText;
     @BindView(R.id.colorImg)
     ImageView colorImg;
+    @BindView(R.id.recordPause)
+    Button recordPause;
 
 
     MP3Recorder mRecorder;
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.record, R.id.stop, R.id.play, R.id.reset, R.id.wavePlay})
+    @OnClick({R.id.record, R.id.stop, R.id.play, R.id.reset, R.id.wavePlay, R.id.recordPause})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.record:
@@ -133,6 +133,8 @@ public class MainActivity extends AppCompatActivity {
                 resolveResetPlay();
             case R.id.wavePlay:
                 resolvePlayWaveRecord();
+            case R.id.recordPause:
+                resolvePause();
                 break;
         }
     }
@@ -185,10 +187,12 @@ public class MainActivity extends AppCompatActivity {
     private void resolveStopRecord() {
         resolveStopUI();
         if (mRecorder != null && mRecorder.isRecording()) {
+            mRecorder.setPause(false);
             mRecorder.stop();
             audioWave.stopView();
         }
         mIsRecord = false;
+        recordPause.setText("暂停");
 
     }
 
@@ -247,6 +251,23 @@ public class MainActivity extends AppCompatActivity {
         resolveNormalUI();
     }
 
+    /**
+     * 暂停
+     */
+    private void resolvePause() {
+        if (!mIsRecord)
+            return;
+        resolvePauseUI();
+        if (mRecorder.isPause()) {
+            resolveRecordUI();
+            mRecorder.setPause(false);
+            recordPause.setText("暂停");
+        } else {
+            mRecorder.setPause(true);
+            recordPause.setText("继续");
+        }
+    }
+
     private String toTime(long time) {
         SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
         String dateString = formatter.format(time);
@@ -255,6 +276,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void resolveNormalUI() {
         record.setEnabled(true);
+        recordPause.setEnabled(false);
         stop.setEnabled(false);
         play.setEnabled(false);
         wavePlay.setEnabled(false);
@@ -263,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void resolveRecordUI() {
         record.setEnabled(false);
+        recordPause.setEnabled(true);
         stop.setEnabled(true);
         play.setEnabled(false);
         wavePlay.setEnabled(false);
@@ -272,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
     private void resolveStopUI() {
         record.setEnabled(true);
         stop.setEnabled(false);
+        recordPause.setEnabled(false);
         play.setEnabled(true);
         wavePlay.setEnabled(true);
         reset.setEnabled(true);
@@ -280,13 +304,20 @@ public class MainActivity extends AppCompatActivity {
     private void resolvePlayUI() {
         record.setEnabled(false);
         stop.setEnabled(false);
+        recordPause.setEnabled(false);
         play.setEnabled(true);
         wavePlay.setEnabled(true);
         reset.setEnabled(true);
     }
 
-
-
+    private void resolvePauseUI() {
+        record.setEnabled(false);
+        recordPause.setEnabled(true);
+        stop.setEnabled(false);
+        play.setEnabled(false);
+        wavePlay.setEnabled(false);
+        reset.setEnabled(false);
+    }
 
 
     /**
