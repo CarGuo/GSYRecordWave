@@ -4,14 +4,14 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>aduioRecord</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
 
-compile 'com.shuyu:aduioRecord:1.0.3'
+compile 'com.shuyu:aduioRecord:1.0.4'
 
 ```
 
@@ -25,6 +25,17 @@ compile 'com.shuyu:aduioRecord:1.0.3'
 ###动态图效果
 <img src="https://github.com/CarGuo/RecordWave/blob/master/01.gif" width="240px" height="426px"/>
 <p></p>
+
+### 1.0.4
+* **增加了录制和播放时的暂停功能**
+
+```
+/**
+ * 是否暂停
+ */
+public void setPause(boolean pause)
+
+```
 
 ### 1.0.3
 * **增加了录制波形和播放波形会根据声音频率变色的功能**
