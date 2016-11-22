@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.piterwilson.audio.MP3RadioStreamDelegate;
@@ -14,6 +15,7 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.shuyu.app.MainActivity.dip2px;
 import static com.shuyu.app.MainActivity.getScreenWidth;
@@ -26,9 +28,13 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
     AudioWaveView audioWave;
     @BindView(R.id.activity_wave_play)
     RelativeLayout activityWavePlay;
+    @BindView(R.id.playBtn)
+    Button playBtn;
 
 
     MP3RadioStreamPlayer player;
+
+    boolean playeEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,7 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
                 play();
             }
         }, 1000);
+        playBtn.setEnabled(false);
     }
 
 
@@ -49,6 +56,26 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
         super.onDestroy();
         audioWave.stopView();
         stop();
+    }
+
+    @OnClick(R.id.playBtn)
+    public void onClick() {
+
+        if (playeEnd) {
+            stop();
+            playBtn.setText("暂停");
+            play();
+            return;
+        }
+
+        if (player.isPause()) {
+            playBtn.setText("暂停");
+            player.setPause(false);
+        } else {
+            playBtn.setText("播放");
+            player.setPause(true);
+        }
+
     }
 
     private void play() {
@@ -89,6 +116,8 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
 
             @Override
             public void run() {
+                playeEnd = false;
+                playBtn.setEnabled(true);
             }
         });
     }
@@ -100,6 +129,9 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
 
             @Override
             public void run() {
+                playeEnd = true;
+                playBtn.setText("播放");
+                playBtn.setEnabled(true);
             }
         });
 
@@ -112,6 +144,8 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
 
             @Override
             public void run() {
+                playeEnd = false;
+                playBtn.setEnabled(true);
             }
         });
 
@@ -124,6 +158,7 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
 
             @Override
             public void run() {
+                playBtn.setEnabled(false);
             }
         });
 

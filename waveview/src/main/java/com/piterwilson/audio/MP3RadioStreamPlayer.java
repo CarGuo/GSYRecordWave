@@ -52,8 +52,10 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
 
     private boolean hadPlay = false;
 
+    private boolean pause;
 
     private long duration;
+
 
     /**
      * Set the delegate for this instance. The delegate will receive notifications about the player's status
@@ -72,7 +74,8 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
     public enum State {
         Retrieving, // retrieving music (filling buffer)
         Stopped,    // player is stopped and not prepared to play
-        Playing,    // playback active 
+        Playing,    // playback active
+        Pause,
     }
 
     ;
@@ -285,7 +288,18 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
         int noOutputCounterLimit = 50;
 
         while (!sawOutputEOS && noOutputCounter < noOutputCounterLimit && !doStop) {
-            //Log.i(LOG_TAG, "loop ");
+
+            if (pause) {
+                this.mState = State.Pause;
+                try {
+                    //防止死循环ANR
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                continue;
+            }
+
             noOutputCounter++;
             if (!sawInputEOS) {
 
@@ -389,8 +403,8 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
             try {
                 if (isLoop || !hadPlay) {
                     MP3RadioStreamPlayer.this.play();
+                    return;
                 }
-                return;
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -429,6 +443,7 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
      * Stops playback
      */
     public void stop() {
+        pause = false;
         doStop = true;
         if (myTimer != null) {
             myTimer.cancel();
@@ -531,7 +546,29 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
         return isLoop;
     }
 
+    /**
+     * 循环
+     */
     public void setLoop(boolean loop) {
         isLoop = loop;
+    }
+
+
+    /**
+     * 时长
+     */
+    public long getDuration() {
+        return duration;
+    }
+
+    public boolean isPause() {
+        return pause;
+    }
+
+    /**
+     * 暂停
+     */
+    public void setPause(boolean pause) {
+        this.pause = pause;
     }
 }

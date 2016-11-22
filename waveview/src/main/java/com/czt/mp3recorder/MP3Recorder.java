@@ -179,6 +179,7 @@ public class MP3Recorder extends BaseRecorder {
     }
 
     public void stop() {
+        mPause = false;
         mIsRecording = false;
     }
 

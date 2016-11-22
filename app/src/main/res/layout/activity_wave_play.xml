@@ -3,12 +3,20 @@
     xmlns:waveview="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_wave_play"
     android:layout_width="match_parent"
-    android:background="@color/primary_material_dark"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/primary_material_dark">
 
     <com.shuyu.waveview.AudioWaveView
         android:id="@+id/audioWave"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         waveview:waveColor="#FAFFFFFF" />
+
+    <Button
+        android:id="@+id/playBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/audioWave"
+        android:layout_marginTop="10dp"
+        android:text="暂停" />
 </RelativeLayout>
