@@ -19,4 +19,11 @@
         android:layout_below="@+id/audioWave"
         android:layout_marginTop="10dp"
         android:text="暂停" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playBtn"
+        android:layout_marginTop="10dp" />
 </RelativeLayout>

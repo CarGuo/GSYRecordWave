@@ -4,14 +4,14 @@
 <dependency>
   <groupId>com.shuyu</groupId>
   <artifactId>aduioRecord</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <type>pom</type>
 </dependency>
 ```
 
 ```
 
-compile 'com.shuyu:aduioRecord:1.0.4'
+compile 'com.shuyu:aduioRecord:1.0.5'
 
 ```
 
@@ -25,6 +25,9 @@ compile 'com.shuyu:aduioRecord:1.0.4'
 ###动态图效果
 <img src="https://github.com/CarGuo/RecordWave/blob/master/01.gif" width="240px" height="426px"/>
 <p></p>
+
+### 1.0.5
+* **增加了播放对seekTo和获取时长与播放进度的支持**
 
 ### 1.0.4
 * **增加了录制和播放时的暂停功能**

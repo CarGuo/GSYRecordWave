@@ -19,6 +19,8 @@ import android.util.Log;
 
 import com.BaseRecorder;
 
+import static android.media.MediaExtractor.SEEK_TO_PREVIOUS_SYNC;
+
 /**
  * Plays a MP3 Radio stream using MediaExtractor, MediaCodec and AudioTrack
  *
@@ -48,6 +50,10 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
 
     private int maxSize;
 
+    private int seekOffset = 0;
+
+    private boolean seekOffsetFlag = false;
+
     private boolean isLoop = false;
 
     private boolean hadPlay = false;
@@ -55,6 +61,8 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
     private boolean pause;
 
     private long duration;
+
+    private long curPosition;
 
 
     /**
@@ -302,10 +310,15 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
 
             noOutputCounter++;
             if (!sawInputEOS) {
+                if (seekOffsetFlag) {
+                    seekOffsetFlag = false;
+                    extractor.seekTo(seekOffset, SEEK_TO_PREVIOUS_SYNC);
+                }
 
                 inputBufIndex = codec.dequeueInputBuffer(kTimeOutUs);
+
                 bufIndexCheck++;
-                // Log.d(LOG_TAG, " bufIndexCheck " + bufIndexCheck);
+                //Log.e(LOG_TAG, " inputBufIndex " + inputBufIndex);
                 if (inputBufIndex >= 0) {
                     ByteBuffer dstBuf = codecInputBuffers[inputBufIndex];
 
@@ -321,8 +334,7 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
                     } else {
                         presentationTimeUs = extractor.getSampleTime();
                     }
-                    // can throw illegal state exception (???)
-
+                    curPosition = presentationTimeUs;
                     codec.queueInputBuffer(
                             inputBufIndex,
                             0 /* offset */,
@@ -445,6 +457,8 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
     public void stop() {
         pause = false;
         doStop = true;
+        seekOffset = 0;
+        seekOffsetFlag = false;
         if (myTimer != null) {
             myTimer.cancel();
             myTimer = null;
@@ -570,5 +584,29 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
      */
     public void setPause(boolean pause) {
         this.pause = pause;
+    }
+
+    public void seekTo(int time) {
+        if (time >= duration || pause) {
+            return;
+        }
+        stop();
+        seekOffsetFlag = true;
+        this.seekOffset = time;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    play();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 300);
+    }
+
+
+    public long getCurPosition() {
+        return curPosition;
     }
 }

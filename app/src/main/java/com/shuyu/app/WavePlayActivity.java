@@ -6,12 +6,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 
 import com.piterwilson.audio.MP3RadioStreamDelegate;
 import com.piterwilson.audio.MP3RadioStreamPlayer;
 import com.shuyu.waveview.AudioWaveView;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,11 +33,17 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
     RelativeLayout activityWavePlay;
     @BindView(R.id.playBtn)
     Button playBtn;
+    @BindView(R.id.seekBar)
+    SeekBar seekBar;
 
 
     MP3RadioStreamPlayer player;
 
+    Timer timer;
+
     boolean playeEnd;
+
+    boolean seekBarTouch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +57,42 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
             }
         }, 1000);
         playBtn.setEnabled(false);
+        seekBar.setEnabled(false);
+
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                seekBarTouch = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                seekBarTouch = false;
+                if (!playeEnd) {
+                    player.seekTo(seekBar.getProgress());
+                }
+            }
+        });
+
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (playeEnd || player == null || !seekBar.isEnabled()) {
+                    return;
+                }
+                long position = player.getCurPosition();
+                if (position > 0 && !seekBarTouch) {
+                    seekBar.setProgress((int) position);
+                }
+            }
+        }, 1000, 1000);
     }
 
 
@@ -55,6 +100,10 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
     protected void onDestroy() {
         super.onDestroy();
         audioWave.stopView();
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
         stop();
     }
 
@@ -64,6 +113,7 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
         if (playeEnd) {
             stop();
             playBtn.setText("暂停");
+            seekBar.setEnabled(true);
             play();
             return;
         }
@@ -71,9 +121,11 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
         if (player.isPause()) {
             playBtn.setText("暂停");
             player.setPause(false);
+            seekBar.setEnabled(false);
         } else {
             playBtn.setText("播放");
             player.setPause(true);
+            seekBar.setEnabled(true);
         }
 
     }
@@ -110,7 +162,7 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
      ****************************************/
 
     @Override
-    public void onRadioPlayerPlaybackStarted(MP3RadioStreamPlayer player) {
+    public void onRadioPlayerPlaybackStarted(final MP3RadioStreamPlayer player) {
         Log.i(TAG, "onRadioPlayerPlaybackStarted");
         this.runOnUiThread(new Runnable() {
 
@@ -118,6 +170,8 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
             public void run() {
                 playeEnd = false;
                 playBtn.setEnabled(true);
+                seekBar.setMax((int) player.getDuration());
+                seekBar.setEnabled(true);
             }
         });
     }
@@ -132,6 +186,7 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
                 playeEnd = true;
                 playBtn.setText("播放");
                 playBtn.setEnabled(true);
+                seekBar.setEnabled(false);
             }
         });
 
@@ -146,6 +201,7 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
             public void run() {
                 playeEnd = false;
                 playBtn.setEnabled(true);
+                seekBar.setEnabled(false);
             }
         });
 
@@ -159,6 +215,7 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
             @Override
             public void run() {
                 playBtn.setEnabled(false);
+                seekBar.setEnabled(false);
             }
         });
 
