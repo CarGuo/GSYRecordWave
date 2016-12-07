@@ -3,7 +3,7 @@
 
 [![](https://jitpack.io/v/CarGuo/RecordWave.svg)](https://jitpack.io/#CarGuo/RecordWave)
 
-## 因为某些原因，现在使用jitpack.io，还请各位切换到jitpack。
+## 因为某些原因，现在使用jitpack.io，还请使用依赖的各位切换到jitpack。
 
 ```
 allprojects {
