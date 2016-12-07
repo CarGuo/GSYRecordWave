@@ -1,19 +1,24 @@
 <h4>MP3音频录制，支持类似IOS原生的单边或者双边波形显示，低版本音频权限兼容，本地或者在线音频播放。可以单纯使用录制功能，也可以单纯使用图形，播放也支持波形显示，录制波形和播放波形会根据声音频率变色的功能。</h4>
 ======================
+
+## 因为某些原因，现在使用jitpack.io，还请各位切换到jitpack。
+
 ```
-<dependency>
-  <groupId>com.shuyu</groupId>
-  <artifactId>aduioRecord</artifactId>
-  <version>1.0.5</version>
-  <type>pom</type>
-</dependency>
+allprojects {
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
+	}
+}
 ```
 
 ```
-
-compile 'com.shuyu:aduioRecord:1.0.5'
+dependencies {
+     compile 'com.github.CarGuo:RecordWave:v1.0.5'
+}
 
 ```
+　
 
 <h4><a href="http://www.jianshu.com/p/2448e2903b07">简书入口 这里有详细介绍</a></h4>
 
