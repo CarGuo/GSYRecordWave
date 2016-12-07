@@ -2,6 +2,7 @@
 ======================
 
 [![](https://jitpack.io/v/CarGuo/RecordWave.svg)](https://jitpack.io/#CarGuo/RecordWave)
+[![Build Status](https://travis-ci.org/CarGuo/RecordWave.svg?branch=master)](https://travis-ci.org/CarGuo/RecordWave)
 
 ## 因为某些原因，现在使用jitpack.io，还请使用依赖的各位切换到jitpack。
 
