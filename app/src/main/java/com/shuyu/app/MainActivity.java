@@ -237,7 +237,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     /**
      * 重置
      */
