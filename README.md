@@ -17,7 +17,7 @@ allprojects {
 
 ```
 dependencies {
-     compile 'com.github.CarGuo:RecordWave:v1.0.5'
+     compile 'com.github.CarGuo:RecordWave:v1.0.6'
 }
 
 ```
