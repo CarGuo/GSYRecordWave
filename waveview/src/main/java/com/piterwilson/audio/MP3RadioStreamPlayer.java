@@ -240,7 +240,7 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
         // System.out.println("歌曲总时间秒:"+duration/1000000);
 
         //时长
-        int bitrate = format.getInteger(MediaFormat.KEY_BIT_RATE);
+        //int bitrate = format.getInteger(MediaFormat.KEY_BIT_RATE);
 
         // the actual decoder
         try {

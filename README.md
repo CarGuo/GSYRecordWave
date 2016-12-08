@@ -34,6 +34,10 @@ dependencies {
 <img src="https://github.com/CarGuo/RecordWave/blob/master/01.gif" width="240px" height="426px"/>
 <p></p>
 
+### 1.0.6
+
+* **更新了对部分6.0的支持**
+
 ### 1.0.5
 * **增加了播放对seekTo和获取时长与播放进度的支持**
 
