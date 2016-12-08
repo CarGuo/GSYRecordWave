@@ -17,7 +17,7 @@ allprojects {
 
 ```
 dependencies {
-     compile 'com.github.CarGuo:RecordWave:v1.0.6'
+     compile 'com.github.CarGuo:RecordWave:v1.0.7'
 }
 
 ```
@@ -33,6 +33,8 @@ dependencies {
 ###动态图效果
 <img src="https://github.com/CarGuo/RecordWave/blob/master/01.gif" width="240px" height="426px"/>
 <p></p>
+
+### 1.0.7 最低API调整到15
 
 ### 1.0.6
 
