@@ -20,8 +20,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.shuyu.app.MainActivity.dip2px;
-import static com.shuyu.app.MainActivity.getScreenWidth;
+import static com.shuyu.app.MainFragment.dip2px;
+import static com.shuyu.app.MainFragment.getScreenWidth;
+
 
 public class WavePlayActivity extends AppCompatActivity implements MP3RadioStreamDelegate {
 
