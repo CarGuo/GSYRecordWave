@@ -17,7 +17,7 @@ allprojects {
 
 ```
 dependencies {
-     compile 'com.github.CarGuo:RecordWave:v1.0.7'
+     compile 'com.github.CarGuo:RecordWave:v1.0.8'
 }
 
 ```
@@ -33,6 +33,17 @@ dependencies {
 ###动态图效果
 <img src="https://github.com/CarGuo/RecordWave/blob/master/01.gif" width="240px" height="426px"/>
 <p></p>
+
+### 1.0.8
+* 最低API16
+* 增加了波形播放边播边缓存（cache）功能
+* 修复了潜在bug
+```
+/**
+ * add cache url when play
+ */
+public void setUrlString(Context context, boolean cache, String urlString)
+```
 
 ### 1.0.7 最低API调整到15
 

@@ -113,7 +113,9 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
         setUrlString(null, false, urlString);
     }
 
-
+    /**
+     * add cache url when play
+     */
     public void setUrlString(Context context, boolean cache, String urlString) {
         String url = urlString;
         if (context != null && cache && !TextUtils.isEmpty(urlString) && urlString.startsWith("http")) {
