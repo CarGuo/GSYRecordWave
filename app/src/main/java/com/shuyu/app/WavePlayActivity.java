@@ -138,6 +138,7 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
             player = null;
         }
         player = new MP3RadioStreamPlayer();
+        //player.setUrlString(this, true, "http://www.stephaniequinn.com/Music/Commercial%20DEMO%20-%2005.mp3");
         player.setUrlString(getIntent().getStringExtra("uri"));
         player.setDelegate(this);
 

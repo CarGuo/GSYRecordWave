@@ -7,7 +7,7 @@ allprojects {
 ext {
     //Android
     androidBuildToolsVersion = "23.0.1"
-    androidMinSdkVersion = 15
+    androidMinSdkVersion = 16
     androidTargetSdkVersion = 22
     androidCompileSdkVersion = 22
     supportLibraryVersion = '24.2.0'
@@ -15,6 +15,7 @@ ext {
 
     //ViewLibraries
     butterKnifeVersion = '8.2.1'
+    videocache = '2.6.4'
 
     androidDependencies = [
             recyclerView: "com.android.support:recyclerview-v7:${supportLibraryVersion}",
@@ -27,5 +28,6 @@ ext {
     viewDependencies = [
             butterKnife     : "com.jakewharton:butterknife:${butterKnifeVersion}",
             apt_butterKnife : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
+            videocache: "com.danikula:videocache:${videocache}",
     ]
 }

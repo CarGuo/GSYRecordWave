@@ -250,7 +250,7 @@ public class AudioWaveView extends View {
     private void resolveToWaveData(ArrayList<Short> list) {
         short allMax = 0;
         for (Short sh : list) {
-            if (sh > allMax) {
+            if (sh != null && sh > allMax) {
                 allMax = sh;
             }
         }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -15,9 +16,11 @@ import android.media.MediaFormat;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.BaseRecorder;
+import com.shuyu.waveview.Manager;
 
 import static android.media.MediaExtractor.SEEK_TO_PREVIOUS_SYNC;
 
@@ -105,8 +108,18 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
      */
     private String mUrlString;
 
-    public void setUrlString(String mUrlString) {
-        this.mUrlString = mUrlString;
+
+    public void setUrlString(String urlString) {
+        setUrlString(null, false, urlString);
+    }
+
+
+    public void setUrlString(Context context, boolean cache, String urlString) {
+        String url = urlString;
+        if (context != null && cache && !TextUtils.isEmpty(urlString) && urlString.startsWith("http")) {
+            url = Manager.newInstance().getProxy(context).getProxyUrl(urlString);
+        }
+        this.mUrlString = url;
     }
 
     /**
