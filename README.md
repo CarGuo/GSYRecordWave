@@ -1,5 +1,6 @@
-<h4>MP3音频录制，支持类似IOS原生的单边或者双边波形显示，低版本音频权限兼容，本地或者在线音频播放。可以单纯使用录制功能，也可以单纯使用图形，播放也支持波形显示，录制波形和播放波形会根据声音频率变色的功能，边播边缓存功能。</h4>
-======================
+### MP3音频录制，支持类似IOS原生的单边或者双边波形显示，低版本音频权限兼容，本地或者在线音频播放。可以单纯使用录制功能，也可以单纯使用图形，播放也支持波形显示，录制波形和播放波形会根据声音频率变色的功能，边播边缓存功能。
+
+---------------------------------
 
 
 * 录制音频为MP3保存本地。
@@ -14,6 +15,8 @@
 [![](https://jitpack.io/v/CarGuo/RecordWave.svg)](https://jitpack.io/#CarGuo/RecordWave)
 [![Build Status](https://travis-ci.org/CarGuo/RecordWave.svg?branch=master)](https://travis-ci.org/CarGuo/RecordWave)
 
+
+#### 在你的项目project下的build.gradle添加
 ```
 allprojects {
 	repositories {
@@ -22,7 +25,7 @@ allprojects {
 	}
 }
 ```
-
+#### 在module下的build.gradle添加依赖
 ```
 dependencies {
      compile 'com.github.CarGuo:RecordWave:v1.0.8'
@@ -31,19 +34,21 @@ dependencies {
 ```
 　
 
-<h4><a href="http://www.jianshu.com/p/2448e2903b07">简书入口 这里有详细介绍</a></h4>
+### [简书入口 这里有详细介绍](http://www.jianshu.com/p/2448e2903b07)
 
 
 ## 效果显示
 <img src="https://github.com/CarGuo/RecordWave/blob/master/01.jpg" width="240px" height="426px"/>
 <img src="https://github.com/CarGuo/RecordWave/blob/master/03.jpg" width="240px" height="426px"/>
-<p></p>
+
 ###动态图效果
 <img src="https://github.com/CarGuo/RecordWave/blob/master/01.gif" width="240px" height="426px"/>
-<p></p>
+　
 
 
 ### QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
+
+----------------------------------------------------
 
 ### 1.0.8
 * 最低API16
