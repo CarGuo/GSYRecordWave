@@ -28,7 +28,7 @@ allprojects {
 #### 在module下的build.gradle添加依赖
 ```
 dependencies {
-     compile 'com.github.CarGuo:RecordWave:v1.0.8'
+     compile 'com.github.CarGuo:RecordWave:v1.0.9'
 }
 
 ```
