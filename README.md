@@ -50,6 +50,9 @@ dependencies {
 
 ----------------------------------------------------
 
+### 1.0.9
+* fix some bug（like 'AudioTrack retrieve' and 'Short == null'）
+
 ### 1.0.8
 * 最低API16
 * 增加了波形播放边播边缓存（cache）功能

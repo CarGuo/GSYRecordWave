@@ -382,7 +382,7 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
                 final byte[] chunk = new byte[info.size];
                 buf.get(chunk);
                 buf.clear();
-                if (chunk.length > 0) {
+                if (chunk.length > 0 && audioTrack != null && !doStop) {
                     //播放
                     audioTrack.write(chunk, 0, chunk.length);
 
@@ -460,7 +460,8 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
 
         }
         if (audioTrack != null) {
-            audioTrack.flush();
+            if (!doStop)
+                audioTrack.flush();
             audioTrack.release();
             audioTrack = null;
         }

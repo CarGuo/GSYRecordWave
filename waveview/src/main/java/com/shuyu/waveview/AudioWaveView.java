@@ -199,15 +199,17 @@ public class AudioWaveView extends View {
                     /*判断大小，是否改变显示的比例*/
                     for (int i = 0, j = 0; i < drawBufsize; i++, j += mOffset) {
                         Short sh = dataList.get(i);
-                        short max = (short) (mBaseLine - sh / mScale);
-                        short min;
-                        if (mWaveCount == 2) {
-                            min = (short) (sh / mScale + mBaseLine);
-                        } else {
-                            min = (short) (mBaseLine);
+                        if (sh != null) {
+                            short max = (short) (mBaseLine - sh / mScale);
+                            short min;
+                            if (mWaveCount == 2) {
+                                min = (short) (sh / mScale + mBaseLine);
+                            } else {
+                                min = (short) (mBaseLine);
+                            }
+                            mBackCanVans.drawLine(j, mBaseLine, j, max, mPaint);
+                            mBackCanVans.drawLine(j, min, j, mBaseLine, mPaint);
                         }
-                        mBackCanVans.drawLine(j, mBaseLine, j, max, mPaint);
-                        mBackCanVans.drawLine(j, min, j, mBaseLine, mPaint);
 
                     }
                     synchronized (mLock) {
