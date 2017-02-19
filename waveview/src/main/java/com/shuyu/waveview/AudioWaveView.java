@@ -251,7 +251,8 @@ public class AudioWaveView extends View {
      */
     private void resolveToWaveData(ArrayList<Short> list) {
         short allMax = 0;
-        for (Short sh : list) {
+        for (int i = 0; i < list.size(); i++) {
+            Short sh = list.get(i);
             if (sh != null && sh > allMax) {
                 allMax = sh;
             }
