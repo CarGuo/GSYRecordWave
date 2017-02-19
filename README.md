@@ -28,7 +28,7 @@ allprojects {
 #### 在module下的build.gradle添加依赖
 ```
 dependencies {
-     compile 'com.github.CarGuo:RecordWave:v1.0.9'
+     compile 'com.github.CarGuo:RecordWave:v1.1.0'
 }
 
 ```
@@ -49,6 +49,9 @@ dependencies {
 ### QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
 
 ----------------------------------------------------
+
+### 1.1.0
+* fix bug.
 
 ### 1.0.9
 * fix some bug（like 'AudioTrack retrieve' and 'Short == null'）
