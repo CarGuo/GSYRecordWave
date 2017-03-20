@@ -67,6 +67,8 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
 
     private long curPosition;
 
+    private long startWaveTime = 0;
+
 
     /**
      * Set the delegate for this instance. The delegate will receive notifications about the player's status
@@ -530,22 +532,24 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
 
     private void sendData(short[] shorts, int readSize) {
         if (dataList != null) {
-            int length = readSize / 300;
-            short resultMax = 0, resultMin = 0;
-            for (short i = 0, k = 0; i < length; i++, k += 300) {
-                for (short j = k, max = 0, min = 1000; j < k + 300; j++) {
-                    if (shorts[j] > max) {
-                        max = shorts[j];
-                        resultMax = max;
-                    } else if (shorts[j] < min) {
-                        min = shorts[j];
-                        resultMin = min;
+            if(getCurPosition() >= startWaveTime) {
+                int length = readSize / 300;
+                short resultMax = 0, resultMin = 0;
+                for (short i = 0, k = 0; i < length; i++, k += 300) {
+                    for (short j = k, max = 0, min = 1000; j < k + 300; j++) {
+                        if (shorts[j] > max) {
+                            max = shorts[j];
+                            resultMax = max;
+                        } else if (shorts[j] < min) {
+                            min = shorts[j];
+                            resultMin = min;
+                        }
                     }
+                    if (dataList.size() > maxSize) {
+                        dataList.remove(0);
+                    }
+                    dataList.add(resultMax);
                 }
-                if (dataList.size() > maxSize) {
-                    dataList.remove(0);
-                }
-                dataList.add(resultMax);
             }
         }
     }
@@ -624,5 +628,17 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
 
     public long getCurPosition() {
         return curPosition;
+    }
+
+    public long getStartWaveTime() {
+        return startWaveTime;
+    }
+
+    /**
+     * 设置开始绘制波形的启始时间
+     * @param startWaveTime 毫秒
+     * */
+    public void setStartWaveTime(long startWaveTime) {
+        this.startWaveTime = startWaveTime * 1000;
     }
 }

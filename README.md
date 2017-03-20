@@ -28,7 +28,7 @@ allprojects {
 #### 在module下的build.gradle添加依赖
 ```
 dependencies {
-     compile 'com.github.CarGuo:RecordWave:v1.1.0'
+     compile 'com.github.CarGuo:RecordWave:v1.1.1'
 }
 
 ```
@@ -49,7 +49,23 @@ dependencies {
 ### QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
 
 ----------------------------------------------------
+### 1.1.1 (2017-03-20)
+增加新接口，修复已知问题
+```
+/**
+ * 设置开始绘制波形的启始时间
+ * @param startWaveTime 毫秒
+ * */
+public void setStartWaveTime(long startWaveTime)
 
+
+/**
+ * 是否画出基线
+ *
+ * @param drawBase
+ */
+public void setDrawBase(boolean drawBase)
+```
 ### 1.1.0
 * fix bug.
 

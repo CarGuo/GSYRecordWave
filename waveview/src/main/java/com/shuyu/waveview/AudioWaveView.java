@@ -61,6 +61,8 @@ public class AudioWaveView extends View {
 
     private boolean mIsDraw = true;
 
+    private boolean mDrawBase = true;
+
     private int mWaveCount = 2;
 
     private int mWaveColor = Color.WHITE;
@@ -194,7 +196,8 @@ public class AudioWaveView extends View {
                 }
                 if (mBackCanVans != null) {
                     mBackCanVans.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                    mBackCanVans.drawLine(0, mBaseLine, mWidthSpecSize, mBaseLine, mPaint);
+                    if (mDrawBase)
+                        mBackCanVans.drawLine(0, mBaseLine, mWidthSpecSize, mBaseLine, mPaint);
                     int drawBufsize = dataList.size();
                     /*判断大小，是否改变显示的比例*/
                     for (int i = 0, j = 0; i < drawBufsize; i++, j += mOffset) {
@@ -427,5 +430,14 @@ public class AudioWaveView extends View {
     private int dip2px(Context context, float dipValue) {
         float fontScale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * fontScale + 0.5f);
+    }
+
+    /**
+     * 是否画出基线
+     *
+     * @param drawBase
+     */
+    public void setDrawBase(boolean drawBase) {
+        mDrawBase = drawBase;
     }
 }
