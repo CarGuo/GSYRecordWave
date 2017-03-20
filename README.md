@@ -28,7 +28,7 @@ allprojects {
 #### 在module下的build.gradle添加依赖
 ```
 dependencies {
-     compile 'com.github.CarGuo:RecordWave:v1.1.1'
+     compile 'com.github.CarGuo:RecordWave:v1.1.2'
 }
 
 ```
@@ -49,7 +49,7 @@ dependencies {
 ### QQ群，有兴趣的可以进来，无底线欢迎：174815284 。
 
 ----------------------------------------------------
-### 1.1.1 (2017-03-20)
+### 1.1.2 (2017-03-20)
 增加新接口，修复已知问题
 ```
 /**

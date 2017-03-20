@@ -151,7 +151,9 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
         doStop = false;
         bufIndexCheck = 0;
         lastInputBufIndex = -1;
-
+        if(startWaveTime > 0) {
+            seekOffsetFlag = true;
+        }
         myTimerTask = new CheckProgressTimerTask();
         myTimer = new Timer();
         myTimer.scheduleAtFixedRate(myTimerTask, 0, 1000); //(timertask,delay,period)
@@ -329,7 +331,8 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
             if (!sawInputEOS) {
                 if (seekOffsetFlag) {
                     seekOffsetFlag = false;
-                    extractor.seekTo(seekOffset, SEEK_TO_PREVIOUS_SYNC);
+                    long seek = (startWaveTime > seekOffset) ? startWaveTime : seekOffset;
+                    extractor.seekTo(seek, SEEK_TO_PREVIOUS_SYNC);
                 }
 
                 inputBufIndex = codec.dequeueInputBuffer(kTimeOutUs);
@@ -635,7 +638,7 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
     }
 
     /**
-     * 设置开始绘制波形的启始时间
+     * 设置开始绘制波形的启始时间,播放前设置，不会被清空
      * @param startWaveTime 毫秒
      * */
     public void setStartWaveTime(long startWaveTime) {
