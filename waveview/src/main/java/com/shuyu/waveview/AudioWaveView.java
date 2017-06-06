@@ -11,12 +11,19 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
 import com.BaseRecorder;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -184,7 +191,12 @@ public class AudioWaveView extends View {
                 ArrayList<Short> dataList = new ArrayList<>();
                 synchronized (mRecDataList) {
                     if (mRecDataList.size() != 0) {
-                        dataList = (ArrayList<Short>) mRecDataList.clone();// 保存  接收数据
+                        try {
+                            dataList = (ArrayList<Short>) deepCopy(mRecDataList);// 保存  接收数据
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            continue;
+                        }
                     }
                 }
                 if (mBackgroundBitmap == null) {
@@ -235,6 +247,23 @@ public class AudioWaveView extends View {
         }
 
     }
+
+    /**
+     * deepClone to avoid ConcurrentModificationException
+     * @param src list
+     * @return dest
+     */
+    public List deepCopy(List src) throws IOException, ClassNotFoundException{
+        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(byteOut);
+        out.writeObject(src);
+
+        ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+        ObjectInputStream in = new ObjectInputStream(byteIn);
+        List dest = (List) in.readObject();
+        return dest;
+    }
+
 
     @Override
     protected void onDraw(Canvas c) {

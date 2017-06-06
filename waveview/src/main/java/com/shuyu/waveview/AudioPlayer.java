@@ -56,7 +56,8 @@ public class AudioPlayer implements MediaPlayer.OnBufferingUpdateListener, Media
 
     public void play() {
         mAudioManager.setMode(AudioManager.MODE_NORMAL);
-        mMediaPlayer.start();
+        if(mMediaPlayer != null)
+            mMediaPlayer.start();
     }
 
     /**
@@ -102,7 +103,8 @@ public class AudioPlayer implements MediaPlayer.OnBufferingUpdateListener, Media
 
     // 暂停
     public void pause() {
-        mMediaPlayer.pause();
+        if(mMediaPlayer != null)
+            mMediaPlayer.pause();
     }
 
     // 停止
