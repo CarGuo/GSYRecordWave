@@ -166,6 +166,7 @@ public class MainFragment extends Fragment {
         //mRecorder.setDataList(audioWave.getRecList(), size);
         //audioWave.setDrawStartOffset((getScreenWidth(getActivity()) / 2));
         //audioWave.setDrawReverse(true);
+        //audioWave.setDataReverse(true);
 
 
         mRecorder.setErrorHandler(new Handler() {

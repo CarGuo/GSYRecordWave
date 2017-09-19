@@ -70,7 +70,9 @@ public class AudioWaveView extends View {
 
     private boolean mDrawBase = true;
 
-    private boolean mDrawReverse = false;//反方向
+    private boolean mDrawReverse = false;//绘制反方向
+
+    private boolean mDataReverse = false;//数据反方向
 
     private int mWaveCount = 2;
 
@@ -218,7 +220,7 @@ public class AudioWaveView extends View {
 
                     int startPosition = (mDrawReverse) ? mWidthSpecSize - mDrawStartOffset : mDrawStartOffset;
                     int jOffset = (mDrawReverse) ? -mOffset : mOffset;
-                    if (mDrawReverse) {
+                    if (mDataReverse) {
                         for (int i = drawBufsize - 1, j = startPosition; i >= 0; i--, j += jOffset) {
                             Short sh = dataList.get(i);
                             drawNow(sh, j);
@@ -493,6 +495,15 @@ public class AudioWaveView extends View {
     public void setDrawReverse(boolean drawReverse) {
         this.mDrawReverse = drawReverse;
     }
+
+    /**
+     * 数据相反方向，可配合上面setDrawReverse一起使用
+     */
+    public void setDataReverse(boolean dataReverse) {
+        this.mDataReverse = dataReverse;
+    }
+
+
 
     /**
      * 绘制开始偏移量

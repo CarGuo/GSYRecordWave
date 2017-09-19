@@ -78,6 +78,8 @@ public class AudioWaveTextureView extends TextureView {
 
     private boolean mDrawReverse = false;//反方向
 
+    private boolean mDataReverse = false;//数据反方向
+
     private int mWaveCount = 2;
 
     private int mWaveColor = Color.WHITE;
@@ -257,7 +259,7 @@ public class AudioWaveTextureView extends TextureView {
                     /*判断大小，是否改变显示的比例*/
                     int startPosition = (mDrawReverse) ? mWidthSpecSize - mDrawStartOffset : mDrawStartOffset;
                     int jOffset = (mDrawReverse) ? -mOffset : mOffset;
-                    if (mDrawReverse) {
+                    if (mDataReverse) {
                         for (int i = drawBufsize - 1, j = startPosition; i >= 0; i--, j += jOffset) {
                             Short sh = dataList.get(i);
                             drawNow(sh, j);
@@ -525,6 +527,12 @@ public class AudioWaveTextureView extends TextureView {
         this.mDrawReverse = drawReverse;
     }
 
+    /**
+     * 数据相反方向，可配合上面setDrawReverse一起使用
+     */
+    public void setDataReverse(boolean dataReverse) {
+        this.mDataReverse = dataReverse;
+    }
     /**
      * 绘制开始偏移量
      */
