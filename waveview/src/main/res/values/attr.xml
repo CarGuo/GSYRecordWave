@@ -3,6 +3,7 @@
 
     <declare-styleable name="waveView">
         <attr name="waveColor" format="color" />
+        <attr name="texture_bg_waveColor" format="color" />
         <attr name="waveOffset" format="dimension" />
         <attr name="waveCount" format="dimension" />
     </declare-styleable>
