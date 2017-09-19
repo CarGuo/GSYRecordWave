@@ -256,12 +256,17 @@ public class AudioWaveTextureView extends TextureView {
                 if (mBackCanVans != null) {
                     mBackCanVans.drawColor(mColorBack, PorterDuff.Mode.CLEAR);
                     mBackCanVans.drawColor(mColorBack);
-                    if (mDrawBase)
-                        mBackCanVans.drawLine(0, mBaseLine, mWidthSpecSize, mBaseLine, mPaint);
                     int drawBufsize = dataList.size();
                     /*判断大小，是否改变显示的比例*/
                     int startPosition = (mDrawReverse) ? mWidthSpecSize - mDrawStartOffset : mDrawStartOffset;
                     int jOffset = (mDrawReverse) ? -mOffset : mOffset;
+                    if (mDrawBase) {
+                        if (mDataReverse) {
+                            mBackCanVans.drawLine(startPosition, mBaseLine, 0, mBaseLine, mPaint);
+                        } else {
+                            mBackCanVans.drawLine(startPosition, mBaseLine, mWidthSpecSize, mBaseLine, mPaint);
+                        }
+                    }
                     if (mDataReverse) {
                         for (int i = drawBufsize - 1, j = startPosition; i >= 0; i--, j += jOffset) {
                             Short sh = dataList.get(i);

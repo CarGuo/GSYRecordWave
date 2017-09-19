@@ -161,7 +161,7 @@ public class MainFragment extends Fragment {
         mRecorder.setDataList(audioWave.getRecList(), size);
 
 
-        //int size = (getScreenWidth(getActivity()) / 2) / dip2px(getActivity(), 1);//控件默认的间隔是1
+        //int size = (getScreenWidth(getActivity()) / 2) / dip2px(getActivity(), 1);
         //mRecorder.setWaveSpeed(600);
         //mRecorder.setDataList(audioWave.getRecList(), size);
         //audioWave.setDrawStartOffset((getScreenWidth(getActivity()) / 2));

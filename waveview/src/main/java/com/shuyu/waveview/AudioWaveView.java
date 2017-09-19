@@ -189,7 +189,7 @@ public class AudioWaveView extends View {
 
 
     //内部类的线程
-    class drawThread extends Thread {
+    private class drawThread extends Thread {
         @SuppressWarnings("unchecked")
         @Override
         public void run() {
@@ -214,12 +214,19 @@ public class AudioWaveView extends View {
                 }
                 if (mBackCanVans != null) {
                     mBackCanVans.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                    if (mDrawBase)
-                        mBackCanVans.drawLine(0, mBaseLine, mWidthSpecSize, mBaseLine, mPaint);
                     int drawBufsize = dataList.size();
 
                     int startPosition = (mDrawReverse) ? mWidthSpecSize - mDrawStartOffset : mDrawStartOffset;
                     int jOffset = (mDrawReverse) ? -mOffset : mOffset;
+
+                    if (mDrawBase) {
+                        if (mDataReverse) {
+                            mBackCanVans.drawLine(startPosition, mBaseLine, 0, mBaseLine, mPaint);
+                        } else {
+                            mBackCanVans.drawLine(startPosition, mBaseLine, mWidthSpecSize, mBaseLine, mPaint);
+                        }
+                    }
+
                     if (mDataReverse) {
                         for (int i = drawBufsize - 1, j = startPosition; i >= 0; i--, j += jOffset) {
                             Short sh = dataList.get(i);
@@ -268,10 +275,11 @@ public class AudioWaveView extends View {
 
     /**
      * deepClone to avoid ConcurrentModificationException
+     *
      * @param src list
      * @return dest
      */
-    public List deepCopy(List src) throws IOException, ClassNotFoundException{
+    public List deepCopy(List src) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream out = new ObjectOutputStream(byteOut);
         out.writeObject(src);
@@ -502,7 +510,6 @@ public class AudioWaveView extends View {
     public void setDataReverse(boolean dataReverse) {
         this.mDataReverse = dataReverse;
     }
-
 
 
     /**
