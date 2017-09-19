@@ -493,6 +493,9 @@ public class AudioWaveTextureView extends TextureView {
      */
     public void setWaveColor(int waveColor) {
         this.mWaveColor = waveColor;
+        if (mPaint != null) {
+            mPaint.setColor(mWaveColor);
+        }
     }
 
     /**
