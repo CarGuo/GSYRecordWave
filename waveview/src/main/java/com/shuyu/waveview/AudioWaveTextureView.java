@@ -513,6 +513,15 @@ public class AudioWaveTextureView extends TextureView {
     }
 
     /**
+     * 设置自定义的paint
+     */
+    public void setLinePaint(Paint paint) {
+        if (paint != null) {
+            mPaint = paint;
+        }
+    }
+
+    /**
      * dip转为PX
      */
     private int dip2px(Context context, float dipValue) {

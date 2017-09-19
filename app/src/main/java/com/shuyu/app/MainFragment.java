@@ -2,6 +2,8 @@ package com.shuyu.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -155,12 +157,14 @@ public class MainFragment extends Fragment {
                 return;
             }
         }
+
+        int offset = dip2px(getActivity(), 5);
         filePath = FileUtils.getAppPath() + UUID.randomUUID().toString() + ".mp3";
         mRecorder = new MP3Recorder(new File(filePath));
-        int size = getScreenWidth(getActivity()) / dip2px(getActivity(), 1);//控件默认的间隔是1
+        int size = getScreenWidth(getActivity()) / offset;//控件默认的间隔是1
         mRecorder.setDataList(audioWave.getRecList(), size);
 
-
+        //高级用法
         //int size = (getScreenWidth(getActivity()) / 2) / dip2px(getActivity(), 1);
         //mRecorder.setWaveSpeed(600);
         //mRecorder.setDataList(audioWave.getRecList(), size);
@@ -168,6 +172,12 @@ public class MainFragment extends Fragment {
         //audioWave.setDrawReverse(true);
         //audioWave.setDataReverse(true);
 
+        //自定义paint
+        //Paint paint = new Paint();
+        //paint.setColor(Color.GRAY);
+        //paint.setStrokeWidth(4);
+        //audioWave.setLinePaint(paint);
+        //audioWave.setOffset(offset);
 
         mRecorder.setErrorHandler(new Handler() {
             @Override

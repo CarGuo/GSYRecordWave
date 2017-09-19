@@ -469,6 +469,16 @@ public class AudioWaveView extends View {
     }
 
     /**
+     * 设置自定义的paint
+     */
+    public void setLinePaint(Paint paint) {
+        if (paint != null) {
+            mPaint = paint;
+        }
+    }
+
+
+    /**
      * 设置波形颜色
      *
      * @param waveCount 波形数量 1或者2
