@@ -53,12 +53,16 @@ public class MP3Recorder extends BaseRecorder {
     private Handler errorHandler;
 
 
-    private int mBufferSize;
     private short[] mPCMBuffer;
     private boolean mIsRecording = false;
-    private int mMaxSize;
     private boolean mSendError;
     private boolean mPause;
+    //缓冲数量
+    private int mBufferSize;
+    //最大数量
+    private int mMaxSize;
+    //波形速度
+    private int mWaveSpeed = 300;
 
     /**
      * Default constructor. Setup recorder with default sampling rate 1 channel,
@@ -228,10 +232,10 @@ public class MP3Recorder extends BaseRecorder {
 
     private void sendData(short[] shorts, int readSize) {
         if (dataList != null) {
-            int length = readSize / 300;
+            int length = readSize / mWaveSpeed;
             short resultMax = 0, resultMin = 0;
-            for (short i = 0, k = 0; i < length; i++, k += 300) {
-                for (short j = k, max = 0, min = 1000; j < k + 300; j++) {
+            for (short i = 0, k = 0; i < length; i++, k += mWaveSpeed) {
+                for (short j = k, max = 0, min = 1000; j < k + mWaveSpeed; j++) {
                     if (shorts[j] > max) {
                         max = shorts[j];
                         resultMax = max;
@@ -280,6 +284,20 @@ public class MP3Recorder extends BaseRecorder {
         this.errorHandler = errorHandler;
     }
 
+    public int getWaveSpeed() {
+        return mWaveSpeed;
+    }
+
+    /**
+     * pcm数据的速度，默认300
+     * 数据越大，速度越慢
+     */
+    public void setWaveSpeed(int waveSpeed) {
+        if (mWaveSpeed <= 0) {
+            return;
+        }
+        this.mWaveSpeed = waveSpeed;
+    }
 
     public static void deleteFile(String filePath) {
         File file = new File(filePath);

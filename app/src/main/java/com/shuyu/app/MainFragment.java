@@ -159,6 +159,15 @@ public class MainFragment extends Fragment {
         mRecorder = new MP3Recorder(new File(filePath));
         int size = getScreenWidth(getActivity()) / dip2px(getActivity(), 1);//控件默认的间隔是1
         mRecorder.setDataList(audioWave.getRecList(), size);
+
+
+        //int size = (getScreenWidth(getActivity()) / 2) / dip2px(getActivity(), 1);//控件默认的间隔是1
+        //mRecorder.setWaveSpeed(600);
+        //mRecorder.setDataList(audioWave.getRecList(), size);
+        //audioWave.setDrawStartOffset((getScreenWidth(getActivity()) / 2));
+        //audioWave.setDrawReverse(true);
+
+
         mRecorder.setErrorHandler(new Handler() {
             @Override
             public void handleMessage(Message msg) {

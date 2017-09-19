@@ -7,11 +7,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
+import android.graphics.SurfaceTexture;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.view.Surface;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -31,7 +34,7 @@ import java.util.List;
  * Created by shuyu on 2016/11/15.
  */
 
-public class AudioWaveView extends View {
+public class AudioWaveTextureView extends TextureView {
 
 
     public static final String MAX = "max_volume"; //map中的key
@@ -58,8 +61,11 @@ public class AudioWaveView extends View {
     private BaseRecorder mBaseRecorder;
 
     private int mWidthSpecSize;
+
     private int mHeightSpecSize;
+
     private int mScale = 1;
+
     private int mBaseLine;
 
     private int mOffset = -11;//波形之间线与线的间隔
@@ -90,25 +96,21 @@ public class AudioWaveView extends View {
 
     private int mDrawStartOffset = 0;
 
+    private Surface mSurface;
 
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            AudioWaveView.this.invalidate();
-        }
-    };
+    private Rect mRect = new Rect();
 
-    public AudioWaveView(Context context) {
+    public AudioWaveTextureView(Context context) {
         super(context);
         init(context, null);
     }
 
-    public AudioWaveView(Context context, AttributeSet attrs) {
+    public AudioWaveTextureView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public AudioWaveView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AudioWaveTextureView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
@@ -153,11 +155,48 @@ public class AudioWaveView extends View {
         mViewPaint = new Paint();
         mPaint.setColor(mWaveColor);
 
+        setSurfaceTextureListener(new SurfaceTextureListener() {
+            @Override
+            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                synchronized (mLock) {
+                    mSurface = new Surface(surface);
+                }
+
+            }
+
+            @Override
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+
+            }
+
+            @Override
+            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+                synchronized (mLock) {
+                    mSurface = null;
+                }
+                return false;
+            }
+
+            @Override
+            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
+            }
+        });
+
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        mRect.top = top;
+        mRect.left = left;
+        mRect.right = right;
+        mRect.bottom = bottom;
     }
 
     @Override
@@ -187,7 +226,7 @@ public class AudioWaveView extends View {
 
 
     //内部类的线程
-    class drawThread extends Thread {
+    private class drawThread extends Thread {
         @SuppressWarnings("unchecked")
         @Override
         public void run() {
@@ -215,7 +254,7 @@ public class AudioWaveView extends View {
                     if (mDrawBase)
                         mBackCanVans.drawLine(0, mBaseLine, mWidthSpecSize, mBaseLine, mPaint);
                     int drawBufsize = dataList.size();
-
+                    /*判断大小，是否改变显示的比例*/
                     int startPosition = (mDrawReverse) ? mWidthSpecSize - mDrawStartOffset : mDrawStartOffset;
                     int jOffset = (mDrawReverse) ? -mOffset : mOffset;
                     if (mDrawReverse) {
@@ -229,14 +268,17 @@ public class AudioWaveView extends View {
                             drawNow(sh, j);
                         }
                     }
-                    synchronized (mLock) {
-                        mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                        mCanvas.drawBitmap(mBackgroundBitmap, 0, 0, mPaint);
-                    }
 
-                    Message msg = new Message();
-                    msg.what = 0;
-                    handler.sendMessage(msg);
+                    if (mSurface != null) {
+                        synchronized (mLock) {
+                            if (mSurface != null && mIsDraw && mBitmap != null) {
+                                Canvas canvas = mSurface.lockCanvas(mRect);
+                                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                                canvas.drawBitmap(mBackgroundBitmap, 0, 0, mPaint);
+                                mSurface.unlockCanvasAndPost(canvas);
+                            }
+                        }
+                    }
                 }
                 //休眠暂停资源
                 try {
@@ -266,10 +308,11 @@ public class AudioWaveView extends View {
 
     /**
      * deepClone to avoid ConcurrentModificationException
+     *
      * @param src list
      * @return dest
      */
-    public List deepCopy(List src) throws IOException, ClassNotFoundException{
+    public List deepCopy(List src) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream out = new ObjectOutputStream(byteOut);
         out.writeObject(src);
@@ -278,17 +321,6 @@ public class AudioWaveView extends View {
         ObjectInputStream in = new ObjectInputStream(byteIn);
         List dest = (List) in.readObject();
         return dest;
-    }
-
-
-    @Override
-    protected void onDraw(Canvas c) {
-        super.onDraw(c);
-        if (mIsDraw && mBitmap != null) {
-            synchronized (mLock) {
-                c.drawBitmap(mBitmap, 0, 0, mViewPaint);
-            }
-        }
     }
 
 
@@ -485,7 +517,6 @@ public class AudioWaveView extends View {
     public void setDrawBase(boolean drawBase) {
         mDrawBase = drawBase;
     }
-
 
     /**
      * 绘制相反方向
