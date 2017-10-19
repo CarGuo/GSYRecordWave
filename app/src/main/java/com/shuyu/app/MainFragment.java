@@ -158,7 +158,7 @@ public class MainFragment extends Fragment {
             }
         }
 
-        int offset = dip2px(getActivity(), 5);
+        int offset = dip2px(getActivity(), 1);
         filePath = FileUtils.getAppPath() + UUID.randomUUID().toString() + ".mp3";
         mRecorder = new MP3Recorder(new File(filePath));
         int size = getScreenWidth(getActivity()) / offset;//控件默认的间隔是1
