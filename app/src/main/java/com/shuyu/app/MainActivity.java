@@ -18,13 +18,15 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.main_frameLayout)
     FrameLayout mainFrameLayout;
 
+    MainFragment newFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        MainFragment newFragment = new MainFragment();
+         newFragment = new MainFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_frameLayout, newFragment);
         transaction.addToBackStack(null);
@@ -34,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if(newFragment.onBackPress()) {
+            return;
+        }
         finish();
     }
 }
