@@ -29,7 +29,7 @@ allprojects {
 #### 在module下的build.gradle添加依赖
 ```
 dependencies {
-     compile 'com.github.CarGuo:RecordWave:v1.1.4'
+     compile 'com.github.CarGuo:RecordWave:v1.1.5'
 }
 
 ```
@@ -51,6 +51,9 @@ dependencies {
 ### QQ群，有兴趣的可以进来，群里视频项目的人居多，平时多吹水吐槽：174815284 。
 
 ----------------------------------------------------
+
+### 1.1.4 (2018-01-17)
+* 低版本支持
 
 ### 1.1.4 (2017-09-19)
 * 增加速度、方向、开始偏移、自定义paint接口
