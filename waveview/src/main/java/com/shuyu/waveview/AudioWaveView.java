@@ -160,31 +160,37 @@ public class AudioWaveView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        creatBackGroundBitmap();
     }
 
     @Override
     protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
         if (visibility == VISIBLE && mBackgroundBitmap == null) {
-            ViewTreeObserver vto = getViewTreeObserver();
-            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    if (getWidth() > 0 && getHeight() > 0) {
-                        mWidthSpecSize = getWidth();
-                        mHeightSpecSize = getHeight();
-                        mBaseLine = mHeightSpecSize / 2;
-                        mBackgroundBitmap = Bitmap.createBitmap(mWidthSpecSize, mHeightSpecSize, Bitmap.Config.ARGB_8888);
-                        mBitmap = Bitmap.createBitmap(mWidthSpecSize, mHeightSpecSize, Bitmap.Config.ARGB_8888);
-                        mBackCanVans.setBitmap(mBackgroundBitmap);
-                        mCanvas.setBitmap(mBitmap);
-                        ViewTreeObserver vto = getViewTreeObserver();
-                        vto.removeOnPreDrawListener(this);
-                    }
-                    return true;
-                }
-            });
+            creatBackGroundBitmap();
         }
+    }
+
+
+    private void creatBackGroundBitmap() {
+        ViewTreeObserver vto = getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                if (getWidth() > 0 && getHeight() > 0) {
+                    mWidthSpecSize = getWidth();
+                    mHeightSpecSize = getHeight();
+                    mBaseLine = mHeightSpecSize / 2;
+                    mBackgroundBitmap = Bitmap.createBitmap(mWidthSpecSize, mHeightSpecSize, Bitmap.Config.ARGB_8888);
+                    mBitmap = Bitmap.createBitmap(mWidthSpecSize, mHeightSpecSize, Bitmap.Config.ARGB_8888);
+                    mBackCanVans.setBitmap(mBackgroundBitmap);
+                    mCanvas.setBitmap(mBitmap);
+                    ViewTreeObserver vto = getViewTreeObserver();
+                    vto.removeOnPreDrawListener(this);
+                }
+                return true;
+            }
+        });
     }
 
 
