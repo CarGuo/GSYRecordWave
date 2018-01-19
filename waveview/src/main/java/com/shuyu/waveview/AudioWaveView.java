@@ -51,7 +51,7 @@ public class AudioWaveView extends View {
 
     private Canvas mBackCanVans = new Canvas();
 
-    private ArrayList<Short> mRecDataList = new ArrayList<>();
+    private final ArrayList<Short> mRecDataList = new ArrayList<>();
 
     private drawThread mInnerThread;
 
@@ -73,6 +73,8 @@ public class AudioWaveView extends View {
     private boolean mDrawReverse = false;//绘制反方向
 
     private boolean mDataReverse = false;//数据反方向
+
+    private boolean mPause = false;//是否站暂停
 
     private int mWaveCount = 2;
 
@@ -214,44 +216,47 @@ public class AudioWaveView extends View {
                 if (mBackgroundBitmap == null) {
                     continue;
                 }
-                resolveToWaveData(dataList);
-                if (dataList.size() > 0) {
-                    updateColor();
-                }
-                if (mBackCanVans != null) {
-                    mBackCanVans.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                    int drawBufsize = dataList.size();
 
-                    int startPosition = (mDrawReverse) ? mWidthSpecSize - mDrawStartOffset : mDrawStartOffset;
-                    int jOffset = (mDrawReverse) ? -mOffset : mOffset;
+                if (!mPause) {
+                    resolveToWaveData(dataList);
+                    if (dataList.size() > 0) {
+                        updateColor();
+                    }
+                    if (mBackCanVans != null) {
+                        mBackCanVans.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                        int drawBufsize = dataList.size();
 
-                    if (mDrawBase) {
+                        int startPosition = (mDrawReverse) ? mWidthSpecSize - mDrawStartOffset : mDrawStartOffset;
+                        int jOffset = (mDrawReverse) ? -mOffset : mOffset;
+
+                        if (mDrawBase) {
+                            if (mDataReverse) {
+                                mBackCanVans.drawLine(startPosition, mBaseLine, 0, mBaseLine, mPaint);
+                            } else {
+                                mBackCanVans.drawLine(startPosition, mBaseLine, mWidthSpecSize, mBaseLine, mPaint);
+                            }
+                        }
+
                         if (mDataReverse) {
-                            mBackCanVans.drawLine(startPosition, mBaseLine, 0, mBaseLine, mPaint);
+                            for (int i = drawBufsize - 1, j = startPosition; i >= 0; i--, j += jOffset) {
+                                Short sh = dataList.get(i);
+                                drawNow(sh, j);
+                            }
                         } else {
-                            mBackCanVans.drawLine(startPosition, mBaseLine, mWidthSpecSize, mBaseLine, mPaint);
+                            for (int i = 0, j = startPosition; i < drawBufsize; i++, j += jOffset) {
+                                Short sh = dataList.get(i);
+                                drawNow(sh, j);
+                            }
                         }
-                    }
+                        synchronized (mLock) {
+                            mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                            mCanvas.drawBitmap(mBackgroundBitmap, 0, 0, mPaint);
+                        }
 
-                    if (mDataReverse) {
-                        for (int i = drawBufsize - 1, j = startPosition; i >= 0; i--, j += jOffset) {
-                            Short sh = dataList.get(i);
-                            drawNow(sh, j);
-                        }
-                    } else {
-                        for (int i = 0, j = startPosition; i < drawBufsize; i++, j += jOffset) {
-                            Short sh = dataList.get(i);
-                            drawNow(sh, j);
-                        }
+                        Message msg = new Message();
+                        msg.what = 0;
+                        handler.sendMessage(msg);
                     }
-                    synchronized (mLock) {
-                        mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                        mCanvas.drawBitmap(mBackgroundBitmap, 0, 0, mPaint);
-                    }
-
-                    Message msg = new Message();
-                    msg.what = 0;
-                    handler.sendMessage(msg);
                 }
                 //休眠暂停资源
                 try {
@@ -345,14 +350,23 @@ public class AudioWaveView extends View {
     /**
      * 停止绘制
      */
-    public void stopView() {
+    public void stopView(boolean cleanView) {
         mIsDraw = false;
-        mRecDataList.clear();
         if (mInnerThread != null) {
             while (mInnerThread.isAlive()) ;
         }
-        mBackCanVans.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        if (cleanView) {
+            mRecDataList.clear();
+            mBackCanVans.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        }
+    }
+
+    /**
+     * 停止绘制
+     */
+    public void stopView() {
+        stopView(true);
     }
 
     private void updateColor() {
@@ -406,6 +420,17 @@ public class AudioWaveView extends View {
         //保存数据
         if (scale != 0)
             mPreFFtCurrentFrequency = scale;
+    }
+
+
+    public boolean isPause() {
+        return mPause;
+    }
+
+    public void setPause(boolean pause) {
+        synchronized (mRecDataList) {
+            this.mPause = pause;
+        }
     }
 
     /**

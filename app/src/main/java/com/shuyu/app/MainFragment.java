@@ -307,9 +307,11 @@ public class MainFragment extends Fragment {
         resolvePauseUI();
         if (mRecorder.isPause()) {
             resolveRecordUI();
+            audioWave.setPause(false);
             mRecorder.setPause(false);
             recordPause.setText("暂停");
         } else {
+            audioWave.setPause(true);
             mRecorder.setPause(true);
             recordPause.setText("继续");
         }
