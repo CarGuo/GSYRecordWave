@@ -29,7 +29,7 @@ allprojects {
 #### 在module下的build.gradle添加依赖
 ```
 dependencies {
-     compile 'com.github.CarGuo:RecordWave:v1.1.5'
+     compile 'com.github.CarGuo:RecordWave:v1.1.6'
 }
 
 ```
@@ -51,8 +51,11 @@ dependencies {
 ### QQ群，有兴趣的可以进来，群里视频项目的人居多，平时多吹水吐槽：174815284 。
 
 ----------------------------------------------------
+### 1.1.6 (2018-01-19)
+* 优化频繁操作的闪动
 
-### 1.1.4 (2018-01-17)
+
+### 1.1.5 (2018-01-17)
 * 低版本支持
 
 ### 1.1.4 (2017-09-19)
