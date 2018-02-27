@@ -29,7 +29,7 @@ allprojects {
 #### 在module下的build.gradle添加依赖
 ```
 dependencies {
-     compile 'com.github.CarGuo:RecordWave:v1.1.6'
+     compile 'com.github.CarGuo:RecordWave:v1.1.7'
 }
 
 ```
@@ -51,6 +51,9 @@ dependencies {
 ### QQ群，有兴趣的可以进来，群里视频项目的人居多，平时多吹水吐槽：174815284 。
 
 ----------------------------------------------------
+### 1.1.7 (2018-02-27)
+* update seekOffset to long 
+
 ### 1.1.6 (2018-01-19)
 * 优化频繁操作的闪动
 
