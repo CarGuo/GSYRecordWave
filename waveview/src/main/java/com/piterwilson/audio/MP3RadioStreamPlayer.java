@@ -53,7 +53,7 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
 
     private int maxSize;
 
-    private int seekOffset = 0;
+    private long seekOffset = 0;
     //波形速度
     private int mWaveSpeed = 300;
 
@@ -611,7 +611,7 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
         this.pause = pause;
     }
 
-    public void seekTo(int time) {
+    public void seekTo(long time) {
         if (time >= duration || pause) {
             return;
         }
@@ -629,7 +629,6 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
             }
         }, 300);
     }
-
 
     public long getCurPosition() {
         return curPosition;
