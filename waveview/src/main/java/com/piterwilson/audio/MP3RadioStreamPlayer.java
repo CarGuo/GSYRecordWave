@@ -39,7 +39,9 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
     protected AudioTrack audioTrack;
 
     protected int inputBufIndex;
+
     protected int bufIndexCheck;
+
     protected int lastInputBufIndex;
 
     protected Boolean doStop = false;
@@ -387,9 +389,16 @@ public class MP3RadioStreamPlayer extends BaseRecorder {
                 ByteBuffer buf = codecOutputBuffers[outputBufIndex];
 
                 final byte[] chunk = new byte[info.size];
-                buf.get(chunk);
-                buf.clear();
-                if (chunk.length > 0 && audioTrack != null && !doStop) {
+                boolean successBufferGet = true;
+                try {
+                    //某些机器上buf可能 isAccessible false
+                    buf.get(chunk);
+                    buf.clear();
+                } catch (Exception e) {
+                    successBufferGet = false;
+                    e.printStackTrace();
+                }
+                if (successBufferGet && chunk.length > 0 && audioTrack != null && !doStop) {
                     //播放
                     audioTrack.write(chunk, 0, chunk.length);
 
