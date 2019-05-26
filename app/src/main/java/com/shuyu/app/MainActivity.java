@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout mainFrameLayout;
 
 
+    MainFragment newFragment;
+
     final String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
 
     @Override
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        MainFragment newFragment = new MainFragment();
+        newFragment = new MainFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_frameLayout, newFragment);
         transaction.addToBackStack(null);
@@ -59,4 +61,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+        if(newFragment.onBackPress()) {
+            return;
+        }
+        finish();
+    }
 }

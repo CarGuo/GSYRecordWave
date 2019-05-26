@@ -145,7 +145,8 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
 
         int size = getScreenWidth(this) / dip2px(this, 1);//控件默认的间隔是1
         player.setDataList(audioWave.getRecList(), size);
-
+        //player.setWaveSpeed(1100);
+        //mRecorder.setDataList(audioWave.getRecList(), size);
         //player.setStartWaveTime(5000);
         //audioWave.setDrawBase(false);
         audioWave.setBaseRecorder(player);

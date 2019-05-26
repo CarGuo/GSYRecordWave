@@ -2,25 +2,19 @@ package com.shuyu.app;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.czt.mp3recorder.MP3Recorder;
 import com.shuyu.waveview.AudioPlayer;
@@ -37,10 +31,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by shuyu on 2016/12/16.
+ * Created by guoshuyu on 2018/1/16.
  */
 
-public class MainFragment extends Fragment {
+public class WavePopWindow extends PopupWindow {
+
     @BindView(R.id.audioWave)
     AudioWaveView audioWave;
     @BindView(R.id.record)
@@ -59,18 +54,14 @@ public class MainFragment extends Fragment {
     ImageView colorImg;
     @BindView(R.id.recordPause)
     Button recordPause;
-    @BindView(R.id.popWindow)
-    Button popWindow;
     @BindView(R.id.rootView)
-    ViewGroup rootView;
-
+    RelativeLayout rootView;
 
     MP3Recorder mRecorder;
+
     AudioPlayer audioPlayer;
 
     String filePath;
-
-    WavePopWindow wavePopWindow;
 
     boolean mIsRecord = false;
 
@@ -79,19 +70,23 @@ public class MainFragment extends Fragment {
     int duration;
     int curPosition;
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+
+    public WavePopWindow(View contentView, int width, int height) {
+        super(contentView, width, height);
+        ButterKnife.bind(this, contentView);
+        initView(contentView);
+        setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                onPause();
+            }
+        });
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+
+    public void initView(View view) {
+        rootView.setGravity(Gravity.CENTER);
         resolveNormalUI();
-        popWindow.setVisibility(View.VISIBLE);
         audioPlayer = new AudioPlayer(getActivity(), new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -118,9 +113,8 @@ public class MainFragment extends Fragment {
         });
     }
 
-    @Override
+
     public void onPause() {
-        super.onPause();
         if (mIsRecord) {
             resolveStopRecord();
         }
@@ -128,21 +122,9 @@ public class MainFragment extends Fragment {
             audioPlayer.pause();
             audioPlayer.stop();
         }
-        if (wavePopWindow != null) {
-            wavePopWindow.onPause();
-        }
     }
 
-    public boolean onBackPress() {
-        if (wavePopWindow != null) {
-            wavePopWindow.dismiss();
-            wavePopWindow = null;
-            return true;
-        }
-        return false;
-    }
-
-    @OnClick({R.id.record, R.id.stop, R.id.play, R.id.reset, R.id.wavePlay, R.id.recordPause, R.id.popWindow})
+    @OnClick({R.id.record, R.id.stop, R.id.play, R.id.reset, R.id.wavePlay, R.id.recordPause})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.record:
@@ -161,13 +143,13 @@ public class MainFragment extends Fragment {
             case R.id.recordPause:
                 resolvePause();
                 break;
-            case R.id.popWindow:
-                View viewGroup = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main, null);
-                wavePopWindow = new WavePopWindow(viewGroup, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                wavePopWindow.showAtLocation(rootView, Gravity.CENTER, 0, 0);
-                break;
         }
     }
+
+    private Context getActivity() {
+        return getContentView().getContext();
+    }
+
 
     /**
      * 开始录音
@@ -282,7 +264,7 @@ public class MainFragment extends Fragment {
         resolvePlayUI();
         Intent intent = new Intent(getActivity(), WavePlayActivity.class);
         intent.putExtra("uri", filePath);
-        startActivity(intent);
+        getActivity().startActivity(intent);
     }
 
     /**
@@ -307,11 +289,9 @@ public class MainFragment extends Fragment {
         resolvePauseUI();
         if (mRecorder.isPause()) {
             resolveRecordUI();
-            audioWave.setPause(false);
             mRecorder.setPause(false);
             recordPause.setText("暂停");
         } else {
-            audioWave.setPause(true);
             mRecorder.setPause(true);
             recordPause.setText("继续");
         }
