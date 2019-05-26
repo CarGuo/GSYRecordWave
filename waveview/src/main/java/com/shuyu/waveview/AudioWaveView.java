@@ -26,8 +26,8 @@ import java.util.List;
 
 
 /**
- * 声音波形的view
- * Created by shuyu on 2016/11/15.
+ 声音波形的view
+ Created by shuyu on 2016/11/15.
  */
 
 public class AudioWaveView extends View {
@@ -51,6 +51,9 @@ public class AudioWaveView extends View {
     private Canvas mBackCanVans = new Canvas();
 
     private ArrayList<Short> mRecDataList = new ArrayList<>();
+
+    final protected Object mLockRecDataList = new Object();
+
 
     private drawThread mInnerThread;
 
@@ -188,12 +191,12 @@ public class AudioWaveView extends View {
         public void run() {
             while (mIsDraw) {
                 ArrayList<Short> dataList = new ArrayList<>();
-                synchronized (mRecDataList) {
+                synchronized (mLockRecDataList) {
                     if (mRecDataList.size() != 0) {
                         try {
                             dataList = (ArrayList<Short>) deepCopy(mRecDataList);// 保存  接收数据
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            //e.printStackTrace();
                             continue;
                         }
                     }
@@ -248,11 +251,12 @@ public class AudioWaveView extends View {
     }
 
     /**
-     * deepClone to avoid ConcurrentModificationException
-     * @param src list
-     * @return dest
+     deepClone to avoid ConcurrentModificationException
+
+     @param src list
+     @return dest
      */
-    public List deepCopy(List src) throws IOException, ClassNotFoundException{
+    public List deepCopy(List src) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream out = new ObjectOutputStream(byteOut);
         out.writeObject(src);
@@ -276,9 +280,9 @@ public class AudioWaveView extends View {
 
 
     /**
-     * 更具当前块数据来判断缩放音频显示的比例
-     *
-     * @param list 音频数据
+     更具当前块数据来判断缩放音频显示的比例
+
+     @param list 音频数据
      */
     private void resolveToWaveData(ArrayList<Short> list) {
         short allMax = 0;
@@ -295,7 +299,7 @@ public class AudioWaveView extends View {
     }
 
     /**
-     * 开始绘制
+     开始绘制
      */
     public void startView() {
         if (mInnerThread != null && mInnerThread.isAlive()) {
@@ -310,11 +314,13 @@ public class AudioWaveView extends View {
     }
 
     /**
-     * 停止绘制
+     停止绘制
      */
     public void stopView() {
         mIsDraw = false;
-        mRecDataList.clear();
+        synchronized (mLockRecDataList) {
+            mRecDataList.clear();
+        }
         if (mInnerThread != null) {
             while (mInnerThread.isAlive()) ;
         }
@@ -376,7 +382,7 @@ public class AudioWaveView extends View {
     }
 
     /**
-     * 三种颜色,不设置用默认的
+     三种颜色,不设置用默认的
      */
     public void setChangeColor(int color1, int color2, int color3) {
         this.mColor1 = color1;
@@ -390,14 +396,14 @@ public class AudioWaveView extends View {
     }
 
     /**
-     * 是否更具声音大小显示清晰度
+     是否更具声音大小显示清晰度
      */
     public void setAlphaByVolume(boolean alphaByVolume) {
         this.mAlphaByVolume = alphaByVolume;
     }
 
     /**
-     * 设置好偶波形会变色
+     设置好偶波形会变色
      */
     public void setBaseRecorder(BaseRecorder baseRecorder) {
         mBaseRecorder = baseRecorder;
@@ -405,20 +411,22 @@ public class AudioWaveView extends View {
 
 
     /**
-     * 将这个list传到Record线程里，对其不断的填充
-     * <p>
-     * Map存有两个key，一个对应AudioWaveView的MAX这个key,一个对应AudioWaveView的MIN这个key
-     *
-     * @return 返回的是一个map的list
+     将这个list传到Record线程里，对其不断的填充
+     <p>
+     Map存有两个key，一个对应AudioWaveView的MAX这个key,一个对应AudioWaveView的MIN这个key
+
+     @return 返回的是一个map的list
      */
     public ArrayList<Short> getRecList() {
-        return mRecDataList;
+        synchronized (mLockRecDataList) {
+            return mRecDataList;
+        }
     }
 
     /**
-     * 设置线与线之间的偏移
-     *
-     * @param offset 偏移值 pix
+     设置线与线之间的偏移
+
+     @param offset 偏移值 pix
      */
     public void setOffset(int offset) {
         this.mOffset = offset;
@@ -430,18 +438,18 @@ public class AudioWaveView extends View {
     }
 
     /**
-     * 设置波形颜色
-     *
-     * @param waveColor 音频颜色
+     设置波形颜色
+
+     @param waveColor 音频颜色
      */
     public void setWaveColor(int waveColor) {
         this.mWaveColor = waveColor;
     }
 
     /**
-     * 设置波形颜色
-     *
-     * @param waveCount 波形数量 1或者2
+     设置波形颜色
+
+     @param waveCount 波形数量 1或者2
      */
     public void setWaveCount(int waveCount) {
         mWaveCount = waveCount;
@@ -453,7 +461,7 @@ public class AudioWaveView extends View {
     }
 
     /**
-     * dip转为PX
+     dip转为PX
      */
     private int dip2px(Context context, float dipValue) {
         float fontScale = context.getResources().getDisplayMetrics().density;
@@ -461,9 +469,9 @@ public class AudioWaveView extends View {
     }
 
     /**
-     * 是否画出基线
-     *
-     * @param drawBase
+     是否画出基线
+
+     @param drawBase
      */
     public void setDrawBase(boolean drawBase) {
         mDrawBase = drawBase;
