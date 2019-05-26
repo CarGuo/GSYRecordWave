@@ -16,6 +16,9 @@ ext {
     butterKnifeVersion = '10.1.0'
     videocache = '2.7.1'
 
+
+    permissionsdispatcher = '4.3.0'
+
     androidDependencies = [
             recyclerView: "androidx.recyclerview:recyclerview:${supportLibraryVersion}",
             appcompat_v7: "androidx.appcompat:appcompat:${supportLibraryVersion}",
@@ -27,5 +30,10 @@ ext {
             butterKnife     : "com.jakewharton:butterknife:${butterKnifeVersion}",
             apt_butterKnife : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
             videocache: "com.danikula:videocache:${videocache}",
+    ]
+
+    dataDependencies = [
+            permissionsdispatcher         : "org.permissionsdispatcher:permissionsdispatcher:${permissionsdispatcher}",
+            permissionsdispatcherProcessor: "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionsdispatcher}",
     ]
 }

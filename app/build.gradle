@@ -39,4 +39,10 @@ dependencies {
     implementation viewDependencies.butterKnife
     implementation androidDependencies.appcompat_v7
     implementation project(':waveview')
+    
+    implementation(dataDependencies.permissionsdispatcher) {
+        // if you don't use android.app.Fragment you can exclude support for them
+        exclude module: "support-v13"
+    }
+    annotationProcessor dataDependencies.permissionsdispatcherProcessor
 }
