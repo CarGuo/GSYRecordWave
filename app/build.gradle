@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
 
@@ -15,6 +15,9 @@ android {
 
         versionCode 1
         versionName "1.0"
+        javaCompileOptions {
+            annotationProcessorOptions.includeCompileClasspath = true
+        }
     }
 
     buildTypes {
@@ -23,12 +26,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     def viewDependencies = rootProject.ext.viewDependencies
-    apt viewDependencies.apt_butterKnife
-    compile viewDependencies.butterKnife
-    compile project(':waveview')
+    annotationProcessor viewDependencies.apt_butterKnife
+    implementation viewDependencies.butterKnife
+    implementation androidDependencies.appcompat_v7
+    implementation project(':waveview')
 }

@@ -27,14 +27,17 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     def viewDependencies = rootProject.ext.viewDependencies
-    compile androidDependencies.appcompat_v7
-    compile viewDependencies.videocache
+    implementation viewDependencies.videocache
 }
 
 //apply from: '../bintray.gradle'

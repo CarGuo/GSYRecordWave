@@ -6,23 +6,21 @@ allprojects {
 
 ext {
     //Android
-    androidBuildToolsVersion = "23.0.1"
+    androidBuildToolsVersion = "28.0.3"
     androidMinSdkVersion = 16
-    androidTargetSdkVersion = 22
-    androidCompileSdkVersion = 22
-    supportLibraryVersion = '24.2.0'
-    otherLibraryVersion = '22.2.1'
+    androidTargetSdkVersion = 28
+    androidCompileSdkVersion = 28
+    supportLibraryVersion = '1.0.0-beta01'
 
     //ViewLibraries
-    butterKnifeVersion = '8.2.1'
-    videocache = '2.6.4'
+    butterKnifeVersion = '10.1.0'
+    videocache = '2.7.1'
 
     androidDependencies = [
-            recyclerView: "com.android.support:recyclerview-v7:${supportLibraryVersion}",
-            appcompat_v7: "com.android.support:appcompat-v7:${otherLibraryVersion}",
-            cardview_v7 : "com.android.support:cardview-v7:23.2.0",
-            support_v4  : "com.android.support:support-v4:${supportLibraryVersion}",
-            design      : "com.android.support:design:${otherLibraryVersion}",
+            recyclerView: "androidx.recyclerview:recyclerview:${supportLibraryVersion}",
+            appcompat_v7: "androidx.appcompat:appcompat:${supportLibraryVersion}",
+            support_v4  : "androidx.legacy:legacy-support-v4:${supportLibraryVersion}",
+            design      : "com.google.android.material:material:${supportLibraryVersion}",
     ]
 
     viewDependencies = [
