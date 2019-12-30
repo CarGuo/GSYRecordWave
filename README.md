@@ -35,9 +35,10 @@ dependencies {
 ```
 　
 
-### [简书入口 这里有基础介绍](http://www.jianshu.com/p/2448e2903b07)### 公众号 GSYTech
-### 公众号
-![公众号](http://img.cdn.guoshuyu.cn/10F364A6-69F5-40C2-AB2A-124EEC1AD8CC.png)
+### [简书入口 这里有基础介绍](http://www.jianshu.com/p/2448e2903b07)
+
+![公众号](http://img.cdn.guoshuyu.cn/WechatIMG3024.jpeg)
+
 
 
 ## 效果显示
