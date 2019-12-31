@@ -37,7 +37,7 @@ dependencies {
 
 ### [简书入口 这里有基础介绍](http://www.jianshu.com/p/2448e2903b07)
 
-![公众号](http://img.cdn.guoshuyu.cn/WechatIMG3024.jpeg)
+![公众号](http://img.cdn.guoshuyu.cn/WeChat-Code)
 
 
 
