@@ -29,7 +29,7 @@ allprojects {
 #### 在module下的build.gradle添加依赖
 ```
 dependencies {
-     implementation 'com.github.CarGuo:GSYRecordWave:2.0.1'
+     implementation 'com.github.CarGuo:GSYRecordWave:2.0.2'
 }
 
 ```
