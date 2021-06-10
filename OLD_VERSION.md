@@ -114,9 +114,9 @@ audioWave.startView();
 
 ```
 <declare-styleable name="waveView">
-    <attr name="waveColor" format="color" />
-    <attr name="waveOffset" format="dimension" />
-    <attr name="waveCount" format="dimension" />
+    <attr name="gsyWwaveColor" format="color" />
+    <attr name="gsyWaveOffset" format="dimension" />
+    <attr name="gsyWaveCount" format="dimension" />
 </declare-styleable>
 
 audioWave.startView(); //开始绘制
