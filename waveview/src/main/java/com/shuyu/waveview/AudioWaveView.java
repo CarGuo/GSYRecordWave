@@ -139,9 +139,9 @@ public class AudioWaveView extends View {
 
         if (attrs != null) {
             TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.waveView);
-            mOffset = ta.getInt(R.styleable.waveView_waveOffset, dip2px(context, -11));
-            mWaveColor = ta.getColor(R.styleable.waveView_waveColor, Color.WHITE);
-            mWaveCount = ta.getInt(R.styleable.waveView_waveCount, 2);
+            mOffset = ta.getInt(R.styleable.waveView_gsyWaveOffset, dip2px(context, -11));
+            mWaveColor = ta.getColor(R.styleable.waveView_gsyWaveColor, Color.WHITE);
+            mWaveCount = ta.getInt(R.styleable.waveView_gsyWaveCount, 2);
             ta.recycle();
         }
 

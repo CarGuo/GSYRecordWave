@@ -129,10 +129,10 @@ public class AudioWaveTextureView extends TextureView {
 
         if (attrs != null) {
             TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.waveView);
-            mOffset = ta.getInt(R.styleable.waveView_waveOffset, dip2px(context, -11));
-            mWaveColor = ta.getColor(R.styleable.waveView_waveColor, Color.WHITE);
-            mColorBack = ta.getColor(R.styleable.waveView_texture_bg_waveColor, Color.TRANSPARENT);
-            mWaveCount = ta.getInt(R.styleable.waveView_waveCount, 2);
+            mOffset = ta.getInt(R.styleable.waveView_gsyWaveOffset, dip2px(context, -11));
+            mWaveColor = ta.getColor(R.styleable.waveView_gsyWaveColor, Color.WHITE);
+            mColorBack = ta.getColor(R.styleable.waveView_gsyTexture_bg_waveColor, Color.TRANSPARENT);
+            mWaveCount = ta.getInt(R.styleable.waveView_gsyWaveCount, 2);
             ta.recycle();
         }
 
