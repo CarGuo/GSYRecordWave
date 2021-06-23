@@ -11,7 +11,7 @@
         android:id="@+id/audioWave"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        waveview:waveColor="#FAFFFFFF" />
+        waveview:gsyWaveColor="#FAFFFFFF" />
 
     <LinearLayout
         android:id="@+id/btn_layout"
