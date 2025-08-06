@@ -2,11 +2,6 @@
 apply from: 'dependencies.gradle'
 
 buildscript {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
-    }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.2.2'
         // Note: ButterKnife is deprecated and will be removed in future versions
@@ -16,14 +11,6 @@ buildscript {
         // Legacy plugins - can be removed if not publishing to Maven/Bintray
         // classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         // classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
     }
 }
 
