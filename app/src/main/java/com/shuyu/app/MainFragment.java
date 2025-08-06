@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -92,7 +93,7 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         resolveNormalUI();
         popWindow.setVisibility(View.VISIBLE);
-        audioPlayer = new AudioPlayer(getActivity(), new Handler() {
+        audioPlayer = new AudioPlayer(getActivity(), new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -173,7 +174,7 @@ public class MainFragment extends Fragment {
      * 开始录音
      */
     private void resolveRecord() {
-        filePath = FileUtils.getAppPath();
+        filePath = FileUtils.getAppPath(getActivity().getApplicationContext());
         File file = new File(filePath);
         if (!file.exists()) {
             if (!file.mkdirs()) {
@@ -183,7 +184,7 @@ public class MainFragment extends Fragment {
         }
 
         int offset = dip2px(getActivity(), 1);
-        filePath = FileUtils.getAppPath() + UUID.randomUUID().toString() + ".mp3";
+        filePath = FileUtils.getAppPath(getActivity().getApplicationContext()) + UUID.randomUUID().toString() + ".mp3";
         mRecorder = new MP3Recorder(new File(filePath));
         int size = getScreenWidth(getActivity()) / offset;//控件默认的间隔是1
         mRecorder.setDataList(audioWave.getRecList(), size);
@@ -203,7 +204,7 @@ public class MainFragment extends Fragment {
         //audioWave.setLinePaint(paint);
         //audioWave.setOffset(offset);
 
-        mRecorder.setErrorHandler(new Handler() {
+        mRecorder.setErrorHandler(new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);

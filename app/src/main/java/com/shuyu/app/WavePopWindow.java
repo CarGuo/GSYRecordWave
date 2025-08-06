@@ -3,6 +3,7 @@ package com.shuyu.app;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -87,7 +88,7 @@ public class WavePopWindow extends PopupWindow {
     public void initView(View view) {
         rootView.setGravity(Gravity.CENTER);
         resolveNormalUI();
-        audioPlayer = new AudioPlayer(getActivity(), new Handler() {
+        audioPlayer = new AudioPlayer(getActivity(), new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -155,7 +156,7 @@ public class WavePopWindow extends PopupWindow {
      * 开始录音
      */
     private void resolveRecord() {
-        filePath = FileUtils.getAppPath();
+        filePath = FileUtils.getAppPath(getActivity().getApplicationContext());
         File file = new File(filePath);
         if (!file.exists()) {
             if (!file.mkdirs()) {
@@ -165,7 +166,7 @@ public class WavePopWindow extends PopupWindow {
         }
 
         int offset = dip2px(getActivity(), 1);
-        filePath = FileUtils.getAppPath() + UUID.randomUUID().toString() + ".mp3";
+        filePath = FileUtils.getAppPath(getActivity().getApplicationContext()) + UUID.randomUUID().toString() + ".mp3";
         mRecorder = new MP3Recorder(new File(filePath));
         int size = getScreenWidth(getActivity()) / offset;//控件默认的间隔是1
         mRecorder.setDataList(audioWave.getRecList(), size);
@@ -185,7 +186,7 @@ public class WavePopWindow extends PopupWindow {
         //audioWave.setLinePaint(paint);
         //audioWave.setOffset(offset);
 
-        mRecorder.setErrorHandler(new Handler() {
+        mRecorder.setErrorHandler(new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);

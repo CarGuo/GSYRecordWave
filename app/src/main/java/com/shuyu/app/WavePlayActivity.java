@@ -2,6 +2,7 @@ package com.shuyu.app;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -52,7 +53,7 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wave_play);
         ButterKnife.bind(this);
-        new Handler().postDelayed(new Runnable() {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 play();

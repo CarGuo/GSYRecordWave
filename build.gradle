@@ -12,9 +12,10 @@ buildscript {
         // Note: ButterKnife is deprecated and will be removed in future versions
         // Consider migrating to View Binding or Data Binding
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
-
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
+        
+        // Legacy plugins - can be removed if not publishing to Maven/Bintray
+        // classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        // classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
     }
 }
 
