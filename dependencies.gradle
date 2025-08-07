@@ -7,9 +7,7 @@ ext {
     supportLibraryVersion = '1.6.1'
 
     //ViewLibraries
-    videocache = '2.7.1'
-
-    permissionsdispatcher = '4.9.2'
+    videocache = '11.1.0'
 
     androidDependencies = [
             recyclerView: "androidx.recyclerview:recyclerview:${supportLibraryVersion}",
@@ -19,11 +17,10 @@ ext {
     ]
 
     viewDependencies = [
-            videocache: "com.danikula:videocache:${videocache}",
+            videocache: "io.github.carguo:gsyvideoplayer-androidvideocache:${videocache}",
     ]
 
     dataDependencies = [
-            permissionsdispatcher         : "org.permissionsdispatcher:permissionsdispatcher:${permissionsdispatcher}",
-            permissionsdispatcherProcessor: "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionsdispatcher}",
+            // Removed permissionsdispatcher - using system APIs instead
     ]
 }

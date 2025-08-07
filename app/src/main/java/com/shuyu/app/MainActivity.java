@@ -2,6 +2,7 @@ package com.shuyu.app;
 
 
 import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.FrameLayout;
@@ -9,9 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
-
-import permissions.dispatcher.PermissionUtils;
 
 /**
  * Created by shuyu on 2016/11/15.
@@ -63,19 +63,40 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        boolean hasAllPermissions = PermissionUtils.hasSelfPermissions(this, permissions);
+        boolean hasAllPermissions = hasAllPermissions(permissions);
         if (!hasAllPermissions) {
             requestPermissions(permissions, 1110);
         }
     }
 
+    private boolean hasAllPermissions(String[] permissions) {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        boolean permissionResult = PermissionUtils.verifyPermissions(grantResults);
+        boolean permissionResult = verifyPermissions(grantResults);
         if (!permissionResult) {
             Toast.makeText(this, "没获取到存储和录音权限，无法正常运行", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private boolean verifyPermissions(int[] grantResults) {
+        if (grantResults.length == 0) {
+            return false;
+        }
+        for (int result : grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
