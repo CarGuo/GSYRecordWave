@@ -1,39 +1,40 @@
 apply plugin: 'com.android.library'
 
 android {
-
     def globalConfiguration = rootProject.extensions.getByName("ext")
-    compileSdkVersion globalConfiguration.androidCompileSdkVersion
-    buildToolsVersion globalConfiguration.androidBuildToolsVersion
+    compileSdk globalConfiguration.androidCompileSdkVersion
 
     defaultConfig {
-
-        minSdkVersion globalConfiguration.androidMinSdkVersion
-        targetSdkVersion globalConfiguration.androidTargetSdkVersion
+        minSdk globalConfiguration.androidMinSdkVersion
+        targetSdk globalConfiguration.androidTargetSdkVersion
 
         versionCode 1
         versionName "1.0"
-
-
     }
+    
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
         }
     }
+    
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
+    
     lintOptions {
         abortOnError false
     }
+    
+    namespace 'com.shuyu.waveview'
 }
 
 dependencies {

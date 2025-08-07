@@ -3,26 +3,17 @@ apply from: 'dependencies.gradle'
 
 buildscript {
     repositories {
-        jcenter()
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com' }
+        gradlePluginPortal()
         google()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
-        classpath 'com.jakewharton:butterknife-gradle-plugin:10.1.0'
-
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-    }
-}
-
-allprojects {
-    repositories {
-        jcenter()
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com' }
-        google()
+        classpath 'com.android.tools.build:gradle:8.2.2'
+        // ButterKnife plugin removed - replaced with findViewById
+        
+        // Legacy plugins - can be removed if not publishing to Maven/Bintray
+        // classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        // classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
     }
 }
 

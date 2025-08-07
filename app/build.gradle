@@ -1,23 +1,17 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.jakewharton.butterknife'
 
 android {
-
     def globalConfiguration = rootProject.extensions.getByName("ext")
-    compileSdkVersion globalConfiguration.androidCompileSdkVersion
-    buildToolsVersion globalConfiguration.androidBuildToolsVersion
-
+    compileSdk globalConfiguration.androidCompileSdkVersion
+    
     defaultConfig {
         applicationId "com.shuyu.app"
 
-        minSdkVersion globalConfiguration.androidMinSdkVersion
-        targetSdkVersion globalConfiguration.androidTargetSdkVersion
+        minSdk globalConfiguration.androidMinSdkVersion
+        targetSdk globalConfiguration.androidTargetSdkVersion
 
         versionCode 1
         versionName "1.0"
-        javaCompileOptions {
-            annotationProcessorOptions.includeCompileClasspath = true
-        }
     }
 
     buildTypes {
@@ -26,26 +20,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
+    
     lintOptions {
         abortOnError false
     }
+    
+    namespace 'com.shuyu.app'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    def viewDependencies = rootProject.ext.viewDependencies
-    annotationProcessor viewDependencies.apt_butterKnife
-    implementation viewDependencies.butterKnife
     implementation androidDependencies.appcompat_v7
     implementation project(':waveview')
-
-    implementation(dataDependencies.permissionsdispatcher) {
-        // if you don't use android.app.Fragment you can exclude support for them
-        exclude module: "support-v13"
-    }
-    annotationProcessor dataDependencies.permissionsdispatcherProcessor
 }

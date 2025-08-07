@@ -2,6 +2,7 @@ package com.shuyu.app;
 
 
 import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.FrameLayout;
@@ -9,11 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import permissions.dispatcher.PermissionUtils;
 
 /**
  * Created by shuyu on 2016/11/15.
@@ -21,20 +19,18 @@ import permissions.dispatcher.PermissionUtils;
  */
 public class MainActivity extends AppCompatActivity {
 
-
-    @BindView(R.id.main_frameLayout)
     FrameLayout mainFrameLayout;
 
 
     MainFragment newFragment;
 
-    final String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        
+        // Initialize views
+        mainFrameLayout = findViewById(R.id.main_frameLayout);
 
         newFragment = new MainFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -42,22 +38,65 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
 
-        boolean hadPermission = PermissionUtils.hasSelfPermissions(this, permissions);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !hadPermission) {
-            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
-            requestPermissions(permissions, 1110);
-        }
-
+        // Request permissions based on API level
+        requestPermissions();
     }
 
+    private void requestPermissions() {
+        String[] permissions;
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 13+ (API 33+)
+            permissions = new String[]{
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.READ_MEDIA_AUDIO
+            };
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Android 6+ (API 23+)
+            permissions = new String[]{
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            };
+        } else {
+            // Below API 23, permissions are granted at install time
+            return;
+        }
+
+        boolean hasAllPermissions = hasAllPermissions(permissions);
+        if (!hasAllPermissions) {
+            requestPermissions(permissions, 1110);
+        }
+    }
+
+    private boolean hasAllPermissions(String[] permissions) {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        boolean sdPermissionResult = PermissionUtils.verifyPermissions(grantResults);
-        if (!sdPermissionResult) {
-            Toast.makeText(this, "没获取到sd卡和录音权限，无法正常运行哦", Toast.LENGTH_LONG).show();
+        boolean permissionResult = verifyPermissions(grantResults);
+        if (!permissionResult) {
+            Toast.makeText(this, "没获取到存储和录音权限，无法正常运行", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private boolean verifyPermissions(int[] grantResults) {
+        if (grantResults.length == 0) {
+            return false;
+        }
+        for (int result : grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 
 

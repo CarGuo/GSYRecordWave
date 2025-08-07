@@ -3,6 +3,7 @@ package com.shuyu.app;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -26,35 +27,21 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  * Created by guoshuyu on 2018/1/16.
  */
 
 public class WavePopWindow extends PopupWindow {
 
-    @BindView(R.id.audioWave)
     AudioWaveView audioWave;
-    @BindView(R.id.record)
     Button record;
-    @BindView(R.id.stop)
     Button stop;
-    @BindView(R.id.play)
     Button play;
-    @BindView(R.id.reset)
     Button reset;
-    @BindView(R.id.wavePlay)
     Button wavePlay;
-    @BindView(R.id.playText)
     TextView playText;
-    @BindView(R.id.colorImg)
     ImageView colorImg;
-    @BindView(R.id.recordPause)
     Button recordPause;
-    @BindView(R.id.rootView)
     RelativeLayout rootView;
 
     MP3Recorder mRecorder;
@@ -73,7 +60,27 @@ public class WavePopWindow extends PopupWindow {
 
     public WavePopWindow(View contentView, int width, int height) {
         super(contentView, width, height);
-        ButterKnife.bind(this, contentView);
+        
+        // Initialize views
+        audioWave = contentView.findViewById(R.id.audioWave);
+        record = contentView.findViewById(R.id.record);
+        stop = contentView.findViewById(R.id.stop);
+        play = contentView.findViewById(R.id.play);
+        reset = contentView.findViewById(R.id.reset);
+        wavePlay = contentView.findViewById(R.id.wavePlay);
+        playText = contentView.findViewById(R.id.playText);
+        colorImg = contentView.findViewById(R.id.colorImg);
+        recordPause = contentView.findViewById(R.id.recordPause);
+        rootView = contentView.findViewById(R.id.rootView);
+        
+        // Set click listeners
+        record.setOnClickListener(this::onClick);
+        stop.setOnClickListener(this::onClick);
+        play.setOnClickListener(this::onClick);
+        reset.setOnClickListener(this::onClick);
+        wavePlay.setOnClickListener(this::onClick);
+        recordPause.setOnClickListener(this::onClick);
+        
         initView(contentView);
         setOnDismissListener(new OnDismissListener() {
             @Override
@@ -87,7 +94,7 @@ public class WavePopWindow extends PopupWindow {
     public void initView(View view) {
         rootView.setGravity(Gravity.CENTER);
         resolveNormalUI();
-        audioPlayer = new AudioPlayer(getActivity(), new Handler() {
+        audioPlayer = new AudioPlayer(getActivity(), new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -124,25 +131,22 @@ public class WavePopWindow extends PopupWindow {
         }
     }
 
-    @OnClick({R.id.record, R.id.stop, R.id.play, R.id.reset, R.id.wavePlay, R.id.recordPause})
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.record:
-                resolveRecord();
-                break;
-            case R.id.stop:
-                resolveStopRecord();
-                break;
-            case R.id.play:
-                resolvePlayRecord();
-                break;
-            case R.id.reset:
-                resolveResetPlay();
-            case R.id.wavePlay:
-                resolvePlayWaveRecord();
-            case R.id.recordPause:
-                resolvePause();
-                break;
+        int id = view.getId();
+
+        // Use if-else instead of switch to avoid constant expression issues
+        if (id == R.id.record) {
+            resolveRecord();
+        } else if (id == R.id.stop) {
+            resolveStopRecord();
+        } else if (id == R.id.play) {
+            resolvePlayRecord();
+        } else if (id == R.id.reset) {
+            resolveResetPlay();
+        } else if (id == R.id.wavePlay) {
+            resolvePlayWaveRecord();
+        } else if (id == R.id.recordPause) {
+            resolvePause();
         }
     }
 
@@ -155,7 +159,7 @@ public class WavePopWindow extends PopupWindow {
      * 开始录音
      */
     private void resolveRecord() {
-        filePath = FileUtils.getAppPath();
+        filePath = FileUtils.getAppPath(getActivity().getApplicationContext());
         File file = new File(filePath);
         if (!file.exists()) {
             if (!file.mkdirs()) {
@@ -165,7 +169,7 @@ public class WavePopWindow extends PopupWindow {
         }
 
         int offset = dip2px(getActivity(), 1);
-        filePath = FileUtils.getAppPath() + UUID.randomUUID().toString() + ".mp3";
+        filePath = FileUtils.getAppPath(getActivity().getApplicationContext()) + UUID.randomUUID().toString() + ".mp3";
         mRecorder = new MP3Recorder(new File(filePath));
         int size = getScreenWidth(getActivity()) / offset;//控件默认的间隔是1
         mRecorder.setDataList(audioWave.getRecList(), size);
@@ -185,7 +189,7 @@ public class WavePopWindow extends PopupWindow {
         //audioWave.setLinePaint(paint);
         //audioWave.setOffset(offset);
 
-        mRecorder.setErrorHandler(new Handler() {
+        mRecorder.setErrorHandler(new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
