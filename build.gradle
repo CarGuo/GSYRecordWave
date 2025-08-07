@@ -2,18 +2,22 @@
 apply from: 'dependencies.gradle'
 
 buildscript {
+
     repositories {
-        gradlePluginPortal()
         google()
-        mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.2.2'
-        // ButterKnife plugin removed - replaced with findViewById
-        
-        // Legacy plugins - can be removed if not publishing to Maven/Bintray
-        // classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        // classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        google()
+        maven { url "https://maven.aliyun.com/repository/public" }
+        maven { url "https://jitpack.io" }
     }
 }
 
