@@ -1,1 +1,2 @@
+rootProject.name = "GSYRecordWave"
 include ':waveview', ':app'

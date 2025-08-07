@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -32,36 +33,22 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  * Created by shuyu on 2016/12/16.
  */
 
 public class MainFragment extends Fragment {
-    @BindView(R.id.audioWave)
+    
     AudioWaveView audioWave;
-    @BindView(R.id.record)
     Button record;
-    @BindView(R.id.stop)
     Button stop;
-    @BindView(R.id.play)
     Button play;
-    @BindView(R.id.reset)
     Button reset;
-    @BindView(R.id.wavePlay)
     Button wavePlay;
-    @BindView(R.id.playText)
     TextView playText;
-    @BindView(R.id.colorImg)
     ImageView colorImg;
-    @BindView(R.id.recordPause)
     Button recordPause;
-    @BindView(R.id.popWindow)
     Button popWindow;
-    @BindView(R.id.rootView)
     ViewGroup rootView;
 
 
@@ -83,7 +70,29 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this, view);
+        
+        // Initialize views
+        audioWave = view.findViewById(R.id.audioWave);
+        record = view.findViewById(R.id.record);
+        stop = view.findViewById(R.id.stop);
+        play = view.findViewById(R.id.play);
+        reset = view.findViewById(R.id.reset);
+        wavePlay = view.findViewById(R.id.wavePlay);
+        playText = view.findViewById(R.id.playText);
+        colorImg = view.findViewById(R.id.colorImg);
+        recordPause = view.findViewById(R.id.recordPause);
+        popWindow = view.findViewById(R.id.popWindow);
+        rootView = view.findViewById(R.id.rootView);
+        
+        // Set click listeners
+        record.setOnClickListener(this::onClick);
+        stop.setOnClickListener(this::onClick);
+        play.setOnClickListener(this::onClick);
+        reset.setOnClickListener(this::onClick);
+        wavePlay.setOnClickListener(this::onClick);
+        recordPause.setOnClickListener(this::onClick);
+        popWindow.setOnClickListener(this::onClick);
+        
         return view;
     }
 
@@ -92,7 +101,7 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         resolveNormalUI();
         popWindow.setVisibility(View.VISIBLE);
-        audioPlayer = new AudioPlayer(getActivity(), new Handler() {
+        audioPlayer = new AudioPlayer(getActivity(), new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -142,30 +151,26 @@ public class MainFragment extends Fragment {
         return false;
     }
 
-    @OnClick({R.id.record, R.id.stop, R.id.play, R.id.reset, R.id.wavePlay, R.id.recordPause, R.id.popWindow})
+
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.record:
-                resolveRecord();
-                break;
-            case R.id.stop:
-                resolveStopRecord();
-                break;
-            case R.id.play:
-                resolvePlayRecord();
-                break;
-            case R.id.reset:
-                resolveResetPlay();
-            case R.id.wavePlay:
-                resolvePlayWaveRecord();
-            case R.id.recordPause:
-                resolvePause();
-                break;
-            case R.id.popWindow:
-                View viewGroup = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main, null);
-                wavePopWindow = new WavePopWindow(viewGroup, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                wavePopWindow.showAtLocation(rootView, Gravity.CENTER, 0, 0);
-                break;
+        int id = view.getId();
+
+        if (id == R.id.record) {
+            resolveRecord();
+        } else if (id == R.id.stop) {
+            resolveStopRecord();
+        } else if (id == R.id.play) {
+            resolvePlayRecord();
+        } else if (id == R.id.reset) {
+            resolveResetPlay();
+        } else if (id == R.id.wavePlay) {
+            resolvePlayWaveRecord();
+        } else if (id == R.id.recordPause) {
+            resolvePause();
+        } else if (id == R.id.popWindow) {
+            View viewGroup = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main, null);
+            wavePopWindow = new WavePopWindow(viewGroup, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            wavePopWindow.showAtLocation(rootView, Gravity.CENTER, 0, 0);
         }
     }
 
@@ -173,7 +178,7 @@ public class MainFragment extends Fragment {
      * 开始录音
      */
     private void resolveRecord() {
-        filePath = FileUtils.getAppPath();
+        filePath = FileUtils.getAppPath(getActivity().getApplicationContext());
         File file = new File(filePath);
         if (!file.exists()) {
             if (!file.mkdirs()) {
@@ -183,7 +188,7 @@ public class MainFragment extends Fragment {
         }
 
         int offset = dip2px(getActivity(), 1);
-        filePath = FileUtils.getAppPath() + UUID.randomUUID().toString() + ".mp3";
+        filePath = FileUtils.getAppPath(getActivity().getApplicationContext()) + UUID.randomUUID().toString() + ".mp3";
         mRecorder = new MP3Recorder(new File(filePath));
         int size = getScreenWidth(getActivity()) / offset;//控件默认的间隔是1
         mRecorder.setDataList(audioWave.getRecList(), size);
@@ -203,7 +208,7 @@ public class MainFragment extends Fragment {
         //audioWave.setLinePaint(paint);
         //audioWave.setOffset(offset);
 
-        mRecorder.setErrorHandler(new Handler() {
+        mRecorder.setErrorHandler(new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);

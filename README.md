@@ -1,5 +1,9 @@
 ### MP3音频录制，支持类似IOS原生的单边或者双边波形显示，低版本音频权限兼容，本地或者在线音频播放。可以单纯使用录制功能，也可以单纯使用图形，播放也支持波形显示，录制波形和播放波形会根据声音频率变色的功能，边播边缓存功能。
 
+## 🎉 Android  兼容升级
+
+此项目已升级为兼容，重新发布托管包。
+
 ---------------------------------
 
 
@@ -13,26 +17,43 @@
 * 自定义线大小、方向和绘制偏移。
 
 
-[![](https://jitpack.io/v/CarGuo/RecordWave.svg)](https://jitpack.io/#CarGuo/RecordWave)
-[![Build Status](https://travis-ci.org/CarGuo/RecordWave.svg?branch=master)](https://travis-ci.org/CarGuo/RecordWave)
+[![](https://jitpack.io/v/CarGuo/GSYRecordWave.svg)](https://jitpack.io/#CarGuo/GSYRecordWave)
 
 
-#### 在你的项目project下的build.gradle添加
-```
+## mavenCentral 添加
+
+```groovy
 allprojects {
-	repositories {
-		...
-		maven { url 'https://jitpack.io' }
-	}
+    repositories {
+        mavenCentral()
+    }
 }
 ```
-#### 在module下的build.gradle添加依赖
-```
-dependencies {
-     implementation 'com.github.CarGuo:GSYRecordWave:2.0.2'
-}
+
+
+```groovy
+
+implementation 'io.github.carguo:aduioRecord:4.0.0'
 
 ```
+
+## 3、Jitpack 
+
+```groovy
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+```groovy
+
+
+    implementation 'com.github.CarGuo:GSYRecordWave:4.0.0'
+
+```
+
 　
 
 ### [简书入口 这里有基础介绍](http://www.jianshu.com/p/2448e2903b07)
@@ -51,9 +72,12 @@ dependencies {
 　
 
 
-### QQ群，有兴趣的可以进来，群里视频项目的人居多，平时多吹水吐槽：174815284 。
+### QQ群，有兴趣的可以进来，群里视频项目的人居多，平时多吹水吐槽：992451658 。
 
 ----------------------------------------------------
+
+### 4.0.0 (2025-08-07)
+更新全新架构
 
 ### 2.0.0 (2019-05-26)
 
