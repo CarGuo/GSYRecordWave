@@ -132,23 +132,21 @@ public class WavePopWindow extends PopupWindow {
     }
 
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.record:
-                resolveRecord();
-                break;
-            case R.id.stop:
-                resolveStopRecord();
-                break;
-            case R.id.play:
-                resolvePlayRecord();
-                break;
-            case R.id.reset:
-                resolveResetPlay();
-            case R.id.wavePlay:
-                resolvePlayWaveRecord();
-            case R.id.recordPause:
-                resolvePause();
-                break;
+        int id = view.getId();
+
+        // Use if-else instead of switch to avoid constant expression issues
+        if (id == R.id.record) {
+            resolveRecord();
+        } else if (id == R.id.stop) {
+            resolveStopRecord();
+        } else if (id == R.id.play) {
+            resolvePlayRecord();
+        } else if (id == R.id.reset) {
+            resolveResetPlay();
+        } else if (id == R.id.wavePlay) {
+            resolvePlayWaveRecord();
+        } else if (id == R.id.recordPause) {
+            resolvePause();
         }
     }
 

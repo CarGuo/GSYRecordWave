@@ -6,9 +6,7 @@ ext {
     androidCompileSdkVersion = 34
     supportLibraryVersion = '1.6.1'
 
-    //ViewLibraries
-    videocache = '11.1.0'
-
+    
     androidDependencies = [
             recyclerView: "androidx.recyclerview:recyclerview:${supportLibraryVersion}",
             appcompat_v7: "androidx.appcompat:appcompat:${supportLibraryVersion}",
@@ -17,7 +15,7 @@ ext {
     ]
 
     viewDependencies = [
-            videocache: "io.github.carguo:gsyvideoplayer-androidvideocache:${videocache}",
+            videocache: "io.github.carguo:gsyvideoplayer-androidvideocache:11.1.0",
     ]
 
     dataDependencies = [

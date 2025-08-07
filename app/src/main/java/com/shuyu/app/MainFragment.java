@@ -151,30 +151,26 @@ public class MainFragment extends Fragment {
         return false;
     }
 
-    @OnClick({R.id.record, R.id.stop, R.id.play, R.id.reset, R.id.wavePlay, R.id.recordPause, R.id.popWindow})
+
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.record:
-                resolveRecord();
-                break;
-            case R.id.stop:
-                resolveStopRecord();
-                break;
-            case R.id.play:
-                resolvePlayRecord();
-                break;
-            case R.id.reset:
-                resolveResetPlay();
-            case R.id.wavePlay:
-                resolvePlayWaveRecord();
-            case R.id.recordPause:
-                resolvePause();
-                break;
-            case R.id.popWindow:
-                View viewGroup = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main, null);
-                wavePopWindow = new WavePopWindow(viewGroup, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                wavePopWindow.showAtLocation(rootView, Gravity.CENTER, 0, 0);
-                break;
+        int id = view.getId();
+
+        if (id == R.id.record) {
+            resolveRecord();
+        } else if (id == R.id.stop) {
+            resolveStopRecord();
+        } else if (id == R.id.play) {
+            resolvePlayRecord();
+        } else if (id == R.id.reset) {
+            resolveResetPlay();
+        } else if (id == R.id.wavePlay) {
+            resolvePlayWaveRecord();
+        } else if (id == R.id.recordPause) {
+            resolvePause();
+        } else if (id == R.id.popWindow) {
+            View viewGroup = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main, null);
+            wavePopWindow = new WavePopWindow(viewGroup, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            wavePopWindow.showAtLocation(rootView, Gravity.CENTER, 0, 0);
         }
     }
 
