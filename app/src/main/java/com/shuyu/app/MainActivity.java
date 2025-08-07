@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import permissions.dispatcher.PermissionUtils;
 
 /**
@@ -21,8 +19,6 @@ import permissions.dispatcher.PermissionUtils;
  */
 public class MainActivity extends AppCompatActivity {
 
-
-    @BindView(R.id.main_frameLayout)
     FrameLayout mainFrameLayout;
 
 
@@ -32,7 +28,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        
+        // Initialize views
+        mainFrameLayout = findViewById(R.id.main_frameLayout);
 
         newFragment = new MainFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

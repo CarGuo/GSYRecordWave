@@ -33,36 +33,22 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  * Created by shuyu on 2016/12/16.
  */
 
 public class MainFragment extends Fragment {
-    @BindView(R.id.audioWave)
+    
     AudioWaveView audioWave;
-    @BindView(R.id.record)
     Button record;
-    @BindView(R.id.stop)
     Button stop;
-    @BindView(R.id.play)
     Button play;
-    @BindView(R.id.reset)
     Button reset;
-    @BindView(R.id.wavePlay)
     Button wavePlay;
-    @BindView(R.id.playText)
     TextView playText;
-    @BindView(R.id.colorImg)
     ImageView colorImg;
-    @BindView(R.id.recordPause)
     Button recordPause;
-    @BindView(R.id.popWindow)
     Button popWindow;
-    @BindView(R.id.rootView)
     ViewGroup rootView;
 
 
@@ -84,7 +70,29 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this, view);
+        
+        // Initialize views
+        audioWave = view.findViewById(R.id.audioWave);
+        record = view.findViewById(R.id.record);
+        stop = view.findViewById(R.id.stop);
+        play = view.findViewById(R.id.play);
+        reset = view.findViewById(R.id.reset);
+        wavePlay = view.findViewById(R.id.wavePlay);
+        playText = view.findViewById(R.id.playText);
+        colorImg = view.findViewById(R.id.colorImg);
+        recordPause = view.findViewById(R.id.recordPause);
+        popWindow = view.findViewById(R.id.popWindow);
+        rootView = view.findViewById(R.id.rootView);
+        
+        // Set click listeners
+        record.setOnClickListener(this::onClick);
+        stop.setOnClickListener(this::onClick);
+        play.setOnClickListener(this::onClick);
+        reset.setOnClickListener(this::onClick);
+        wavePlay.setOnClickListener(this::onClick);
+        recordPause.setOnClickListener(this::onClick);
+        popWindow.setOnClickListener(this::onClick);
+        
         return view;
     }
 

@@ -27,35 +27,21 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  * Created by guoshuyu on 2018/1/16.
  */
 
 public class WavePopWindow extends PopupWindow {
 
-    @BindView(R.id.audioWave)
     AudioWaveView audioWave;
-    @BindView(R.id.record)
     Button record;
-    @BindView(R.id.stop)
     Button stop;
-    @BindView(R.id.play)
     Button play;
-    @BindView(R.id.reset)
     Button reset;
-    @BindView(R.id.wavePlay)
     Button wavePlay;
-    @BindView(R.id.playText)
     TextView playText;
-    @BindView(R.id.colorImg)
     ImageView colorImg;
-    @BindView(R.id.recordPause)
     Button recordPause;
-    @BindView(R.id.rootView)
     RelativeLayout rootView;
 
     MP3Recorder mRecorder;
@@ -74,7 +60,27 @@ public class WavePopWindow extends PopupWindow {
 
     public WavePopWindow(View contentView, int width, int height) {
         super(contentView, width, height);
-        ButterKnife.bind(this, contentView);
+        
+        // Initialize views
+        audioWave = contentView.findViewById(R.id.audioWave);
+        record = contentView.findViewById(R.id.record);
+        stop = contentView.findViewById(R.id.stop);
+        play = contentView.findViewById(R.id.play);
+        reset = contentView.findViewById(R.id.reset);
+        wavePlay = contentView.findViewById(R.id.wavePlay);
+        playText = contentView.findViewById(R.id.playText);
+        colorImg = contentView.findViewById(R.id.colorImg);
+        recordPause = contentView.findViewById(R.id.recordPause);
+        rootView = contentView.findViewById(R.id.rootView);
+        
+        // Set click listeners
+        record.setOnClickListener(this::onClick);
+        stop.setOnClickListener(this::onClick);
+        play.setOnClickListener(this::onClick);
+        reset.setOnClickListener(this::onClick);
+        wavePlay.setOnClickListener(this::onClick);
+        recordPause.setOnClickListener(this::onClick);
+        
         initView(contentView);
         setOnDismissListener(new OnDismissListener() {
             @Override
@@ -125,7 +131,6 @@ public class WavePopWindow extends PopupWindow {
         }
     }
 
-    @OnClick({R.id.record, R.id.stop, R.id.play, R.id.reset, R.id.wavePlay, R.id.recordPause})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.record:

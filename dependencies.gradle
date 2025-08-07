@@ -7,7 +7,6 @@ ext {
     supportLibraryVersion = '1.6.1'
 
     //ViewLibraries
-    butterKnifeVersion = '10.2.3'
     videocache = '2.7.1'
 
     permissionsdispatcher = '4.9.2'
@@ -20,8 +19,6 @@ ext {
     ]
 
     viewDependencies = [
-            butterKnife     : "com.jakewharton:butterknife:${butterKnifeVersion}",
-            apt_butterKnife : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
             videocache: "com.danikula:videocache:${videocache}",
     ]
 

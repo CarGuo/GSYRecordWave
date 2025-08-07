@@ -18,10 +18,6 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 import static com.shuyu.app.MainFragment.dip2px;
 import static com.shuyu.app.MainFragment.getScreenWidth;
 
@@ -30,13 +26,9 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
 
     private final static String TAG = "WavePlayActivity";
 
-    @BindView(R.id.audioWave)
     AudioWaveView audioWave;
-    @BindView(R.id.activity_wave_play)
     RelativeLayout activityWavePlay;
-    @BindView(R.id.playBtn)
     Button playBtn;
-    @BindView(R.id.seekBar)
     SeekBar seekBar;
 
 
@@ -52,7 +44,16 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wave_play);
-        ButterKnife.bind(this);
+        
+        // Initialize views
+        audioWave = findViewById(R.id.audioWave);
+        activityWavePlay = findViewById(R.id.activity_wave_play);
+        playBtn = findViewById(R.id.playBtn);
+        seekBar = findViewById(R.id.seekBar);
+        
+        // Set click listener
+        playBtn.setOnClickListener(v -> onClick());
+        
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -110,7 +111,6 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
         stop();
     }
 
-    @OnClick(R.id.playBtn)
     public void onClick() {
 
         if (playeEnd) {

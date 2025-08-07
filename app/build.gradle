@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.jakewharton.butterknife'
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -37,8 +36,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     def viewDependencies = rootProject.ext.viewDependencies
-    annotationProcessor viewDependencies.apt_butterKnife
-    implementation viewDependencies.butterKnife
     implementation androidDependencies.appcompat_v7
     implementation project(':waveview')
 
